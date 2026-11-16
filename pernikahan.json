@@ -1,4 +1,5 @@
 {
+  "weddingDate": "",
   "budget": [
     {
       "id": "89f0be6b-8ea7-4969-95ee-5a580ce909d2",
@@ -47,7 +48,7 @@
     {
       "id": "70332d5f-9f69-4433-8835-49640c1f0705",
       "task": "Tentukan tanggal pernikahan",
-      "done": false,
+      "done": true,
       "due": ""
     },
     {
@@ -160,5 +161,107 @@
     }
   ],
   "vendors": [],
-  "guests": []
+  "guests": [],
+  "seserahan": [
+    {
+      "id": "744ab748-9751-4ccc-82fa-cf9202723520",
+      "name": "Perlengkapan Ibadah (Mukena, Sajadah, Al-Qur'an)",
+      "side": "Untuk Wanita",
+      "category": "Ibadah",
+      "estimated": 1000000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "d89b5629-252b-44bc-8ea6-9fb99860636e",
+      "name": "Busana / Kebaya & Kain",
+      "side": "Untuk Wanita",
+      "category": "Busana",
+      "estimated": 1500000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "a59d6a1a-f1f5-42c8-8cd0-265c3195f6ce",
+      "name": "Tas & Sepatu Pesta",
+      "side": "Untuk Wanita",
+      "category": "Aksesoris",
+      "estimated": 1200000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "fe85ec77-cbcc-4e88-a86a-5734b406f115",
+      "name": "Skincare, Makeup & Parfum",
+      "side": "Untuk Wanita",
+      "category": "Kecantikan",
+      "estimated": 1500000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "857dfcc9-02bf-47ab-9214-7292ba2a855f",
+      "name": "Perhiasan / Cincin",
+      "side": "Untuk Wanita",
+      "category": "Perhiasan",
+      "estimated": 3000000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "d0e70051-0fed-48cd-88dd-a27a5e7bc2df",
+      "name": "Handuk & Perlengkapan Mandi",
+      "side": "Untuk Wanita",
+      "category": "Perlengkapan",
+      "estimated": 400000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "2dc66b95-5aa0-462b-b57c-42c2bf783b94",
+      "name": "Kemeja, Batik & Celana",
+      "side": "Untuk Pria",
+      "category": "Busana",
+      "estimated": 1000000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "be80269e-82b5-4bad-a1fe-25196e154536",
+      "name": "Sepatu & Ikat Pinggang",
+      "side": "Untuk Pria",
+      "category": "Aksesoris",
+      "estimated": 800000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "72e3f9a7-3799-4b19-a3dc-969e4e017a16",
+      "name": "Parfum & Perawatan Pria",
+      "side": "Untuk Pria",
+      "category": "Perlengkapan",
+      "estimated": 500000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    },
+    {
+      "id": "e57be59d-9965-4e49-9278-bfa87cb15d01",
+      "name": "Kotak Hantaran & Jasa Hias Seserahan",
+      "side": "Bersama",
+      "category": "Jasa Hias",
+      "estimated": 750000,
+      "actual": 0,
+      "status": "Belum dibeli",
+      "note": ""
+    }
+  ]
 }
