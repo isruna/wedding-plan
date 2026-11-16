@@ -795,4 +795,433 @@ function summaryView() {
         ${buildDonutSvg(donutBudgetItems, useSpent ? "Total Keluar" : "Total Budget", shortMoney(useSpent ? spent : total))}
       </div>
 
-      <div cl
+      <div class="chart-card">
+        <div class="chart-head">
+          <h2>Status Tamu &amp; Kesiapan</h2>
+          <span>${data.guests.length} total undangan</span>
+        </div>
+        ${buildDonutSvg(rsvpItems, "Tamu Hadir", `${guestHadPeople} org`)}
+        <div class="rings-row">
+          ${buildMiniRing(checkPct, "#9e3b5c", "Checklist", `${done}/${data.checklist.length} selesai`)}
+          ${buildMiniRing(sesPct, "#4f774c", "Seserahan", `${sesDone}/${data.seserahan.length} siap`)}
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Ringkasan per Kategori</h2></div>
+      ${makeTable(["Kategori","Anggaran","Pengeluaran","Sisa","Terpakai","Status"],rows)}
+    </section>`;
+}
+
+function budgetView() {
+  let sumEst=0, sumSpent=0;
+  const rows=data.budget.map(x=>{
+    const st=budgetStats(x);
+    sumEst+=st.est; sumSpent+=st.spent;
+    return `<tr>
+      <td><strong>${esc(x.name)}</strong></td>
+      <td class="num">${money(st.est)}</td>
+      <td class="num">${money(st.spent)}</td>
+      <td class="num">${money(st.left)}</td>
+      <td><div class="prog-inline"><div class="progress"><i class="${st.spent>st.est?"over":""}" style="width:${Math.min(st.pct,100)}%"></i></div><small>${st.pct}%</small></div></td>
+      <td><span class="badge ${st.status[1]}">${st.status[0]}</span></td>
+      <td class="row-actions"><button data-edit="budget" data-id="${esc(x.id)}">Ubah</button><button data-delete="budget" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+  const footer = data.budget.length
+    ? `<tr><td>Total</td><td class="num">${money(sumEst)}</td><td class="num">${money(sumSpent)}</td><td class="num">${money(sumEst-sumSpent)}</td><td colspan="3"></td></tr>`
+    : "";
+  return `<section class="panel"><div class="panel-head"><h2>Anggaran</h2><button class="btn gold" data-add="budget">＋ Tambah kategori</button></div>${makeTable(["Kategori","Anggaran","Realisasi","Sisa","Terpakai","Status","Aksi"],rows,footer)}</section>`;
+}
+
+function expenseView() {
+  const total=data.expenses.reduce((s,x)=>s+Number(x.amount||0),0);
+  const rows=data.expenses.map(x=>{
+    const st=x.status||"Lunas";
+    const cls=st==="Lunas"?"lunas":st==="DP"?"dp":"tidak";
+    return `<tr>
+      <td>${esc(x.date||"-")}</td>
+      <td>${esc(x.name)}</td>
+      <td>${esc(x.category)}</td>
+      <td>${esc(x.vendor||"-")}</td>
+      <td class="num">${money(x.amount)}</td>
+      <td><span class="badge ${cls}">${esc(st)}</span></td>
+      <td class="row-actions"><button data-edit="expenses" data-id="${esc(x.id)}">Ubah</button><button data-delete="expenses" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+  return `<section class="panel"><div class="panel-head"><div><h2>Pengeluaran</h2><span class="muted">Total tercatat: ${money(total)}</span></div><button class="btn gold" data-add="expenses">＋ Tambah pengeluaran</button></div>${makeTable(["Tanggal","Deskripsi","Kategori","Vendor","Jumlah","Status","Aksi"],rows)}</section>`;
+}
+
+function paymentView() {
+  const rows=data.payments.map(x=>{
+    const total=Number(x.total||0), paid=Number(x.paid||0), left=total-paid;
+    const isPaid = total > 0 && paid >= total;
+    const status = isPaid ? ["Lunas","lunas"] : paid > 0 ? ["DP / Cicilan","dp"] : ["Belum bayar","tidak"];
+    return `<tr>
+      <td><strong>${esc(x.vendor)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
+      <td class="num">${money(total)}</td>
+      <td class="num">${money(paid)}</td>
+      <td class="num">${money(Math.max(0,left))}</td>
+      <td>${esc(x.due||"-")}</td>
+      <td><span class="badge ${status[1]}">${status[0]}</span></td>
+      <td class="row-actions"><button data-edit="payments" data-id="${esc(x.id)}">Ubah</button><button data-delete="payments" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+  return `<section class="panel"><div class="panel-head"><h2>Pembayaran Vendor</h2><button class="btn gold" data-add="payments">＋ Tambah pembayaran</button></div>${makeTable(["Vendor","Total Kontrak","Sudah Dibayar","Sisa","Jatuh Tempo","Status","Aksi"],rows)}</section>`;
+}
+
+function checklistView() {
+  const today = todayStr();
+  const rows=data.checklist.map(x=>{
+    const overdue = Boolean(x.due && x.due < today && !x.done);
+    const rowCls = x.done ? "done-row" : overdue ? "overdue" : "";
+    const badge = x.done ? ["Selesai","done"] : overdue ? ["Terlambat","terlambat"] : ["Belum","pending"];
+    return `<tr class="${rowCls}">
+      <td><label class="taskline"><input type="checkbox" data-task="${esc(x.id)}" ${x.done?"checked":""}><span class="task-text">${esc(x.task)}</span></label></td>
+      <td>${esc(x.category||"-")}</td>
+      <td>${esc(x.due||"-")}</td>
+      <td>${esc(x.owner||"-")}</td>
+      <td><span class="badge ${badge[1]}">${badge[0]}</span></td>
+      <td class="row-actions"><button data-edit="checklist" data-id="${esc(x.id)}">Ubah</button><button data-delete="checklist" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+  return `<section class="panel"><div class="panel-head"><div><h2>Checklist</h2><span class="muted">Tugas lewat tenggat ditandai garis berry di sisi kiri.</span></div><button class="btn gold" data-add="checklist">＋ Tambah tugas</button></div>${makeTable(["Tugas","Kategori","Tenggat","PJ","Status","Aksi"],rows)}</section>`;
+}
+
+function vendorView() {
+  const rows=data.vendors.map(x=>{
+    const bk=x.booked||"Belum";
+    const cls=bk==="Sudah"?"sudah":bk==="DP / Proses"?"proses":"pending";
+    return `<tr>
+      <td><strong>${esc(x.name)}</strong></td>
+      <td>${esc(x.category)}</td>
+      <td>${esc(x.contact||"-")}</td>
+      <td class="num">${money(x.price)}</td>
+      <td><span class="badge ${cls}">${esc(bk)}</span></td>
+      <td>${esc(x.note||"-")}</td>
+      <td class="row-actions"><button data-edit="vendors" data-id="${esc(x.id)}">Ubah</button><button data-delete="vendors" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+  return `<section class="panel"><div class="panel-head"><h2>Vendor</h2><button class="btn gold" data-add="vendors">＋ Tambah vendor</button></div>${makeTable(["Nama Vendor","Kategori","Kontak","Harga","Booking","Catatan","Aksi"],rows)}</section>`;
+}
+
+function guestView() {
+  const hadir=data.guests.filter(g=>g.rsvp==="Hadir").reduce((s,g)=>s+Number(g.count||1),0);
+  const pending=data.guests.filter(g=>(g.rsvp||"Belum konfirmasi")==="Belum konfirmasi").length;
+  const rows=data.guests.map(x=>`<tr>
+    <td><strong>${esc(x.name)}</strong></td>
+    <td>${esc(x.side||"-")}</td>
+    <td>${esc(x.contact||"-")}</td>
+    <td class="num">${esc(x.count||1)}</td>
+    <td><span class="badge ${x.rsvp==="Hadir"?"hadir":x.rsvp==="Tidak hadir"?"tidak":"pending"}">${esc(x.rsvp||"Belum konfirmasi")}</span></td>
+    <td>${esc(x.note||"-")}</td>
+    <td class="row-actions"><button data-edit="guests" data-id="${esc(x.id)}">Ubah</button><button data-delete="guests" data-id="${esc(x.id)}">Hapus</button></td>
+  </tr>`).join("");
+  return `<section class="panel"><div class="panel-head"><div><h2>Tamu</h2><span class="muted">Total hadir: ${hadir} orang · Menunggu RSVP: ${pending} undangan</span></div><button class="btn gold" data-add="guests">＋ Tambah tamu</button></div>${makeTable(["Nama","Kategori","Kontak","Jumlah","RSVP","Catatan","Aksi"],rows)}</section>`;
+}
+
+function seserahanView() {
+  const list = seserahanFilter === "Semua"
+    ? data.seserahan
+    : data.seserahan.filter(x => x.side === seserahanFilter);
+
+  const totalItems = data.seserahan.length;
+  const boughtOrDone = data.seserahan.filter(x => x.status === "Sudah dibeli" || x.status === "Sudah dihias").length;
+  const decorated = data.seserahan.filter(x => x.status === "Sudah dihias").length;
+  const totalEst = data.seserahan.reduce((s,x)=>s+Number(x.estimated||0),0);
+  const totalActual = data.seserahan.reduce((s,x)=>s+Number(x.actual||0),0);
+  const pct = totalItems ? Math.round(boughtOrDone / totalItems * 100) : 0;
+
+  const rows = list.map(x => {
+    const st = x.status || "Belum dibeli";
+    const cls = st === "Sudah dihias" ? "dihias" : st === "Sudah dibeli" ? "dibeli" : "pending";
+    return `<tr>
+      <td><strong>${esc(x.name)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
+      <td>${esc(x.side||"Untuk Wanita")}</td>
+      <td>${esc(x.category||"-")}</td>
+      <td class="num">${money(x.estimated)}</td>
+      <td class="num">${money(x.actual)}</td>
+      <td><button type="button" class="badge clickable ${cls}" data-cycle-seserahan="${esc(x.id)}" title="Klik untuk ubah status">${esc(st)}</button></td>
+      <td class="row-actions"><button data-edit="seserahan" data-id="${esc(x.id)}">Ubah</button><button data-delete="seserahan" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+
+  const filters = ["Semua","Untuk Wanita","Untuk Pria","Bersama"].map(f =>
+    `<button type="button" class="btn small filter ${seserahanFilter===f?"active":""}" data-seserahan-filter="${esc(f)}">${esc(f)}</button>`
+  ).join("");
+
+  return `
+    <section class="cards">
+      <div class="card highlight"><label>Total Item Seserahan</label><strong>${totalItems} item</strong><small>${decorated} sudah dihias</small></div>
+      <div class="card green"><label>Sudah Dibeli / Siap</label><strong>${boughtOrDone}/${totalItems}</strong><div class="progress"><i style="width:${pct}%"></i></div></div>
+      <div class="card blue"><label>Estimasi Biaya</label><strong>${money(totalEst)}</strong><small>Rencana anggaran seserahan</small></div>
+      <div class="card purple"><label>Realisasi Biaya</label><strong>${money(totalActual)}</strong><small>Selisih: ${money(totalEst - totalActual)}</small></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Daftar Seserahan</h2>
+          <span class="muted">Klik status untuk mengganti (Belum dibeli → Sudah dibeli → Sudah dihias).</span>
+        </div>
+        <div class="toolbar">
+          ${filters}
+          <button class="btn gold" data-add="seserahan">＋ Tambah seserahan</button>
+        </div>
+      </div>
+      ${makeTable(["Barang","Pihak","Kategori","Estimasi","Realisasi","Status","Aksi"], rows)}
+    </section>`;
+}
+
+function detectGitHubRepo() {
+  if (!location.hostname.endsWith(".github.io")) return {};
+  const owner = location.hostname.replace(/\.github\.io$/i, "");
+  const parts = location.pathname.split("/").filter(Boolean);
+  return { owner, repo: parts[0] || "" };
+}
+
+function openConfig() {
+  const form=document.getElementById("configForm");
+  const guessed=detectGitHubRepo();
+  form.elements.owner.value=config.owner||guessed.owner||"";
+  form.elements.repo.value=config.repo||guessed.repo||"";
+  form.elements.path.value=config.path||"pernikahan.json";
+  form.elements.token.value=config.token||"";
+  document.getElementById("configDialog").showModal();
+}
+
+document.getElementById("githubButton").addEventListener("click",openConfig);
+document.getElementById("cancelConfig").addEventListener("click",()=>document.getElementById("configDialog").close());
+document.getElementById("syncButton").addEventListener("click",async ()=>{
+  if (config.owner && config.repo && config.token) {
+    await clearBrowserCaches(true);
+  }
+  await loadData();
+  toast("Sinkronisasi selesai");
+});
+
+document.getElementById("clearCacheButton").addEventListener("click",async ()=>{
+  const hasGitHub = Boolean(config.owner && config.repo && config.token);
+  if (!hasGitHub) {
+    if (!confirm("Anda sedang dalam mode lokal (belum terhubung ke GitHub). Menghapus cache akan mereset data lokal. Lanjutkan?")) return;
+  }
+  await clearBrowserCaches(true);
+  localStorage.removeItem(VERSION_KEY);
+  toast("Cache dihapus, memuat ulang tampilan…");
+  setTimeout(()=>{
+    location.replace(location.pathname + "?v=" + Date.now() + location.hash);
+  }, 250);
+});
+
+document.getElementById("exportButton").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="pernikahan-backup.json"; a.click();
+  URL.revokeObjectURL(url);
+  toast("Backup JSON diunduh");
+});
+
+document.getElementById("configForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const f=e.currentTarget;
+  config={
+    owner:f.elements.owner.value.trim(),
+    repo:f.elements.repo.value.trim(),
+    path:f.elements.path.value.trim()||"pernikahan.json",
+    token:f.elements.token.value.trim()
+  };
+  localStorage.setItem(CONFIG_KEY,JSON.stringify(config));
+  document.getElementById("configDialog").close();
+  await clearBrowserCaches(true);
+  await loadData();
+});
+
+function bytesToBase64(bytes) {
+  let binary="";
+  for(let i=0;i<bytes.length;i+=0x8000) binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+  return btoa(binary);
+}
+function base64ToText(content) {
+  const binary=atob(content.replace(/\s/g,""));
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+function githubUrl() {
+  const path=(config.path||"pernikahan.json").split("/").filter(Boolean).map(encodeURIComponent).join("/");
+  return `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${path}`;
+}
+async function apiRequest(method,body,signal) {
+  const response=await fetch(githubUrl(),{
+    method,signal,cache:"no-store",
+    headers:{
+      "Accept":"application/vnd.github+json",
+      "Authorization":`Bearer ${config.token}`,
+      "X-GitHub-Api-Version":"2022-11-28",
+      "Content-Type":"application/json"
+    },
+    body:body?JSON.stringify(body):undefined
+  });
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok) {
+    const err = new Error(result.message||`GitHub API error ${response.status}`);
+    err.status = response.status;
+    throw err;
+  }
+  return result;
+}
+async function loadData() {
+  config=readConfig();
+  try {
+    const cached=localStorage.getItem(CACHE_KEY);
+    if(cached) data=normalizeData(JSON.parse(cached));
+  } catch { localStorage.removeItem(CACHE_KEY); }
+  render();
+
+  if(!config.owner||!config.repo||!config.token) {
+    showStatus("Mode lokal — klik GitHub untuk mengatur sinkronisasi","warn");
+    return;
+  }
+
+  showStatus("Mengambil data terbaru dari GitHub…","warn");
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),15000);
+  try {
+    let result;
+    try {
+      result=await apiRequest("GET",null,controller.signal);
+    } catch(err) {
+      if(err.status!==404) throw err;
+      data=newData();
+      await saveToGitHub();
+      return;
+    }
+    data=normalizeData(JSON.parse(base64ToText(result.content)));
+    localStorage.setItem(CACHE_KEY,JSON.stringify(data));
+    render();
+    const jam=new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+    showStatus(`Tersinkron dengan GitHub (${jam})`,"ok");
+  } catch(err) {
+    console.error("GitHub sync error:",err);
+    showStatus(err.name==="AbortError"?"Koneksi timeout — periksa internet":`Gagal sinkron: ${err.message}`,"err");
+  } finally {
+    clearTimeout(timer);
+  }
+}
+async function saveToGitHub() {
+  localStorage.setItem(CACHE_KEY,JSON.stringify(data));
+  if(!config.owner||!config.repo||!config.token) {
+    showStatus("Tersimpan di browser saja — atur GitHub untuk sinkronisasi","warn");
+    return;
+  }
+  showStatus("Menyimpan ke GitHub…","warn");
+  try {
+    let sha;
+    try { sha=(await apiRequest("GET")).sha; }
+    catch(err) { if(err.status!==404) throw err; }
+    const content=bytesToBase64(new TextEncoder().encode(JSON.stringify(data,null,2)));
+    const body={message:"Update wedding planner data",content};
+    if(sha) body.sha=sha;
+    await apiRequest("PUT",body);
+    const jam=new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+    showStatus(`Tersimpan & tersinkron (${jam})`,"ok");
+  } catch(err) {
+    console.error("GitHub save error:",err);
+    const msg = err.status === 409
+      ? "Konflik versi di GitHub — klik Sinkronkan lalu coba lagi"
+      : `Tersimpan di browser; gagal ke GitHub: ${err.message}`;
+    showStatus(msg,"err");
+    throw err;
+  }
+}
+async function changeData(fn) {
+  fn();
+  render();
+  localStorage.setItem(CACHE_KEY,JSON.stringify(data));
+  try { await saveToGitHub(); toast("Data tersimpan"); }
+  catch { toast("Tersimpan lokal; sinkronisasi GitHub gagal"); }
+}
+
+function editItem(key,id) {
+  openItem(key,data[key].find(x=>x.id===id));
+}
+function openItem(key,item=null) {
+  editingId=item?item.id:null;
+  const dialog=document.getElementById("itemDialog");
+  document.getElementById("itemTitle").textContent=(item?"Ubah ":"Tambah ")+titles[key];
+  const host=document.getElementById("itemFields");
+  host.innerHTML=fields[key].map(([name,label,type,req,extra])=>{
+    const defVal = type==="number" && extra!==undefined ? extra : "";
+    const value=item?.[name]??defVal;
+    const reqAttr = req ? "required" : "";
+    if(type==="category") {
+      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${data.budget.map(b=>`<option value="${esc(b.name)}" ${value===b.name?"selected":""}>${esc(b.name)}</option>`).join("")}</select></div>`;
+    }
+    if(type==="select") {
+      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${(extra||[]).map(v=>`<option value="${esc(v)}" ${value===v?"selected":""}>${esc(v)}</option>`).join("")}</select></div>`;
+    }
+    if(type==="textarea") {
+      return `<div class="field"><label>${label}</label><textarea name="${name}" ${reqAttr}>${esc(value)}</textarea></div>`;
+    }
+    return `<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${esc(value)}" ${type==="number"?'min="0" step="1"':''} ${reqAttr}></div>`;
+  }).join("");
+  dialog.dataset.key=key;
+  dialog.showModal();
+}
+
+document.getElementById("cancelItem").addEventListener("click",()=>document.getElementById("itemDialog").close());
+document.getElementById("itemForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const dialog=document.getElementById("itemDialog");
+  const key=dialog.dataset.key, form=e.currentTarget, item={};
+  for(const [name,,type] of fields[key]) {
+    const el=form.elements[name];
+    item[name]=type==="number"?Number(el.value||0):el.value.trim();
+  }
+  dialog.close();
+  await changeData(()=>{
+    if(editingId) {
+      if(key==="budget") {
+        const old=data.budget.find(x=>x.id===editingId);
+        if(old && old.name!==item.name) {
+          data.expenses=data.expenses.map(ex=>ex.category===old.name?{...ex,category:item.name}:ex);
+        }
+      }
+      data[key]=data[key].map(x=>x.id===editingId?{...x,...item}:x);
+    } else {
+      data[key].push({id:uid(),...item,...(key==="checklist"?{done:false}:{})});
+    }
+    editingId=null;
+  });
+});
+
+async function removeItem(key,id) {
+  if(!confirm("Hapus data ini?")) return;
+  await changeData(()=>{data[key]=data[key].filter(x=>x.id!==id);});
+}
+async function toggleTask(id,done) {
+  await changeData(()=>{data.checklist=data.checklist.map(x=>x.id===id?{...x,done}:x);});
+}
+async function cycleSeserahan(id) {
+  const order=["Belum dibeli","Sudah dibeli","Sudah dihias"];
+  await changeData(()=>{
+    data.seserahan=data.seserahan.map(x=>{
+      if(x.id!==id) return x;
+      const next=order[(order.indexOf(x.status||"Belum dibeli")+1)%order.length];
+      return {...x,status:next};
+    });
+  });
+}
+
+(async function init() {
+  if (localStorage.getItem(VERSION_KEY) !== APP_VERSION) {
+    await clearBrowserCaches(true);
+    localStorage.setItem(VERSION_KEY, APP_VERSION);
+  }
+  render();
+  await loadData();
+})();
+</script>
+</body>
+</html>
