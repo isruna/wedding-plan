@@ -132,31 +132,67 @@
 
 <script>
 const categories = [
-  ["Gedung/Venue",25000000],["Katering",60000000],["Dekorasi",15000000],
-  ["Fotografi & Videografi",12000000],["Rias & Busana",8000000],
-  ["Undangan & Cetak",2000000],["Musik/Hiburan",5000000],["Lain-lain",5000000]
+  ["Gedung/Venue", 25000000],
+  ["Katering", 60000000],
+  ["Dekorasi", 15000000],
+  ["Fotografi & Videografi", 12000000],
+  ["Rias & Busana", 8000000],
+  ["Undangan & Cetak", 2000000],
+  ["Musik/Hiburan", 5000000],
+  ["Lain-lain", 5000000]
 ];
+
 const tasks = [
-  "Tentukan tanggal pernikahan","Tentukan total anggaran","Buat daftar tamu awal",
-  "Booking gedung/venue","Booking katering dan cek menu tasting",
-  "Booking fotografer dan videografer","Booking dekorasi",
-  "Booking MC, musik, atau hiburan","Booking rias pengantin dan busana",
-  "Pesan undangan dan cetak","Kirim undangan ke tamu","Pantau RSVP tamu",
-  "Ajukan izin dan urus surat-surat administrasi","Fitting busana dan jas",
-  "Siapkan denah meja dan kartu nama","Konfirmasi ulang semua vendor (H-30)",
-  "Kirim rundown ke semua vendor (H-7)","Gladi bersih (H-1)",
+  "Tentukan tanggal pernikahan",
+  "Tentukan total anggaran",
+  "Buat daftar tamu awal",
+  "Booking gedung/venue",
+  "Booking katering dan cek menu tasting",
+  "Booking fotografer dan videografer",
+  "Booking dekorasi",
+  "Booking MC, musik, atau hiburan",
+  "Booking rias pengantin dan busana",
+  "Pesan undangan dan cetak",
+  "Kirim undangan ke tamu",
+  "Pantau RSVP tamu",
+  "Ajukan izin dan urus surat-surat administrasi",
+  "Fitting busana dan jas",
+  "Siapkan denah meja dan kartu nama",
+  "Konfirmasi ulang semua vendor (H-30)",
+  "Kirim rundown ke semua vendor (H-7)",
+  "Gladi bersih (H-1)",
   "Siapkan perlengkapan darurat"
 ];
-const tabs = ["Ringkasan","Anggaran","Pengeluaran","Pembayaran Vendor","Checklist","Vendor","Tamu"];
-const defaultData = () => ({
-  budget: categories.map(([name,amount]) => ({id:uid(),name,amount})),
-  expenses: [], payments: [],
-  checklist: tasks.map(task => ({id:uid(),task,done:false,due:""})),
-  vendors: [], guests: []
-});
-let data = defaultData(), activeTab = "Ringkasan", editingId = null, config = {};
 
-const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random().toString(16).slice(2));
+const tabs = [
+  "Ringkasan",
+  "Anggaran",
+  "Pengeluaran",
+  "Pembayaran Vendor",
+  "Checklist",
+  "Vendor",
+  "Tamu"
+];
+
+const defaultData = () => ({
+  budget: categories.map(([name, amount]) => ({ id: uid(), name, amount })),
+  expenses: [],
+  payments: [],
+  checklist: tasks.map(task => ({ id: uid(), task, done: false, due: "" })),
+  vendors: [],
+  guests: []
+});
+
+let data = defaultData();
+let activeTab = "Ringkasan";
+let editingId = null;
+let config = {};
+
+const uid = () =>
+  crypto.randomUUID
+    ? crypto.randomUUID()
+    : Date.now() + "-" + Math.random().toString(16).slice(2);
+
 const rupiah = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cacheKey = "wedding-planner-data-v1";
@@ -176,18 +212,41 @@ function saveCache(){ localStorage.setItem(cacheKey,JSON.stringify(data)); }
 function encodeBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
 function decodeBase64(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,"")))); }
 
-function openConfig(){
-  config=JSON.parse(localStorage.getItem(configKey)||"{}");
-  const f=document.getElementById("configForm");
-  f.owner.value=config.owner||""; f.repo.value=config.repo||"";
-  f.path.value=config.path||"pernikahan.json"; f.token.value=config.token||"";
-  configDialog.showModal();
+function openConfig() {
+  const dialog = document.getElementById("configDialog");
+  const form = document.getElementById("configForm");
+
+  try {
+    config = JSON.parse(localStorage.getItem(configKey) || "{}");
+  } catch {
+    config = {};
+    localStorage.removeItem(configKey);
+  }
+
+  form.elements.owner.value = config.owner || "";
+  form.elements.repo.value = config.repo || "";
+  form.elements.path.value = config.path || "pernikahan.json";
+  form.elements.token.value = config.token || "";
+
+  if (!dialog.open) dialog.showModal();
 }
-document.getElementById("configForm").addEventListener("submit",async e=>{
-  e.preventDefault(); const f=e.currentTarget;
-  config={owner:f.owner.value.trim(),repo:f.repo.value.trim(),path:f.path.value.trim(),token:f.token.value.trim()};
-  localStorage.setItem(configKey,JSON.stringify(config)); configDialog.close(); await loadData();
+
+document.getElementById("configForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+  config = {
+    owner: form.elements.owner.value.trim(),
+    repo: form.elements.repo.value.trim(),
+    path: form.elements.path.value.trim() || "pernikahan.json",
+    token: form.elements.token.value.trim()
+  };
+
+  localStorage.setItem(configKey, JSON.stringify(config));
+  document.getElementById("configDialog").close();
+  await loadData();
 });
+
 
 async function githubRequest(method,body){
   const url=`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${config.path.split("/").map(encodeURIComponent).join("/")}`;
