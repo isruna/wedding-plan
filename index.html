@@ -172,7 +172,7 @@
 
     .charts-grid {
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(min(100%, 330px),1fr));
       gap:16px; margin-bottom:18px;
     }
     .chart-card {
@@ -180,32 +180,42 @@
       border-radius:14px; padding:20px;
       box-shadow:var(--shadow);
       display:flex; flex-direction:column;
+      min-width:0; overflow:hidden;
     }
-    .chart-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:14px }
+    .chart-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:16px }
     .chart-head span { font-size:12px; color:var(--muted) }
 
     /* DONUT */
-    .donut-wrap { display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin:auto 0 }
-    .donut-svg { position:relative; width:164px; height:164px; flex-shrink:0 }
+    .donut-wrap {
+      display:flex; flex-direction:column; align-items:center;
+      gap:16px; margin:auto 0; width:100%; min-width:0;
+    }
+    .donut-svg { position:relative; width:156px; height:156px; flex-shrink:0 }
     .donut-center {
       position:absolute; inset:0; display:flex; flex-direction:column;
       align-items:center; justify-content:center; text-align:center; pointer-events:none;
     }
     .donut-center small { font-size:11px; color:var(--muted) }
     .donut-center b { font-size:14px; font-variant-numeric:tabular-nums; margin-top:2px; color:var(--text) }
-    .legend { flex:1; min-width:150px; display:grid; gap:7px }
-    .legend-item { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:12px }
-    .legend-left { display:flex; align-items:center; gap:8px; min-width:0 }
+    .legend {
+      width:100%; min-width:0;
+      display:grid; gap:7px;
+    }
+    .legend-item {
+      display:grid; grid-template-columns:minmax(0,1fr) auto;
+      align-items:center; gap:10px; font-size:12px; min-width:0;
+    }
+    .legend-left { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden }
     .legend-dot { width:9px; height:9px; border-radius:3px; flex-shrink:0 }
     .legend-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text) }
     .legend-val { color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap }
 
     /* BAR CHART */
-    .barchart { display:grid; gap:12px }
-    .bar-row { display:grid; gap:5px }
-    .bar-meta { display:flex; justify-content:space-between; gap:10px; font-size:12px }
-    .bar-meta strong { font-weight:600; color:var(--text) }
-    .bar-meta span { color:var(--muted); font-variant-numeric:tabular-nums }
+    .barchart { display:grid; gap:12px; min-width:0 }
+    .bar-row { display:grid; gap:5px; min-width:0 }
+    .bar-meta { display:flex; justify-content:space-between; gap:10px; font-size:12px; min-width:0 }
+    .bar-meta strong { font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+    .bar-meta span { color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap }
     .bar-tracks { display:grid; gap:4px }
     .bar-track { height:7px; background:#ebede4; border-radius:999px; overflow:hidden }
     .bar-fill { height:100%; border-radius:999px; transition:width .3s ease }
@@ -214,11 +224,18 @@
     .bar-fill.over { background:var(--berry) }
 
     /* READINESS RINGS */
-    .rings-row { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line) }
-    .ring-box { display:flex; align-items:center; gap:12px; background:#f8faf6; border:1px solid var(--line); border-radius:12px; padding:12px }
+    .rings-row {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+      gap:10px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line);
+    }
+    .ring-box {
+      display:flex; align-items:center; gap:10px; min-width:0;
+      background:#f8faf6; border:1px solid var(--line); border-radius:12px; padding:10px;
+    }
     .ring-box svg { flex-shrink:0 }
-    .ring-box b { display:block; font-size:15px; color:var(--text) }
-    .ring-box small { color:var(--muted); font-size:12px }
+    .ring-box > div { min-width:0 }
+    .ring-box b { display:block; font-size:14px; color:var(--text) }
+    .ring-box small { display:block; color:var(--muted); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 
     /* TABLE */
     .table-wrap { overflow:auto }
@@ -236,9 +253,9 @@
     tr.done-row .task-text { text-decoration:line-through }
     .empty { padding:24px; text-align:center; color:var(--muted) }
     .badge { display:inline-block; border-radius:20px; padding:4px 10px; background:#eceee6; color:#4b5349; font-size:12px; font-weight:600; white-space:nowrap }
-    .badge.done,.badge.lunas,.badge.hadir,.badge.aman,.badge.dihias,.badge.sudah { background:#e2efe3; color:var(--green) }
+    .badge.done,.badge.lunas,.badge.hadir,.badge.aman,.badge.dihias,.badge.sudah,.badge.selesai { background:#e2efe3; color:var(--green) }
     .badge.pending,.badge.dibeli,.badge.dp,.badge.proses { background:#fdf1d6; color:var(--amber) }
-    .badge.tidak,.badge.lebih,.badge.terlambat { background:var(--berry-soft); color:var(--red) }
+    .badge.tidak,.badge.lebih,.badge.terlambat,.badge.belum { background:var(--berry-soft); color:var(--red) }
     .badge.clickable { cursor:pointer; border:1px solid transparent }
     .badge.clickable:hover { border-color:var(--berry) }
     .taskline { display:flex; align-items:center; gap:9px; cursor:pointer }
@@ -362,7 +379,7 @@
 <script>
 "use strict";
 
-const APP_VERSION = "2026-11-16-v4-matchaberry";
+const APP_VERSION = "2026-11-16-v5-matchaberry-adm";
 const VERSION_KEY = "wedding-planner-version";
 const CONFIG_KEY = "wedding-planner-config-v1";
 const CACHE_KEY = "wedding-planner-data-v1";
@@ -375,7 +392,8 @@ const TABS = [
   { name:"Checklist", icon:"☑" },
   { name:"Vendor", icon:"✦" },
   { name:"Tamu", icon:"☺" },
-  { name:"Seserahan", icon:"🎁" }
+  { name:"Seserahan", icon:"🎁" },
+  { name:"Administrasi", icon:"📄" }
 ];
 
 const PALETTE = ["#4f774c","#9e3b5c","#7fa67b","#c96887","#c99746","#77587c","#5d948d","#b37d89"];
@@ -418,6 +436,25 @@ const SESERAHAN_PRESET = [
   ["Parfum & Perawatan Pria","Untuk Pria","Perlengkapan",500000],
   ["Kotak Hantaran & Jasa Hias Seserahan","Bersama","Jasa Hias",750000]
 ];
+const ADMINISTRASI_PRESET = [
+  ["Surat Pengantar RT & RW","Bersama","Kelurahan / RT-RW","Minta pengantar dari RT/RW masing-masing calon pengantin untuk mengurus surat ke kelurahan."],
+  ["Formulir N1, N2 & N4 dari Kelurahan/Desa","Bersama","KUA / Kependudukan","Surat Pengantar Nikah (N1), Permohonan Kehendak Nikah (N2), dan Persetujuan Calon Pengantin (N4)."],
+  ["Formulir N5 (Surat Izin Orang Tua)","Bersama","KUA / Kependudukan","Wajib dilampirkan jika usia calon pengantin masih di bawah 21 tahun."],
+  ["Fotokopi KTP, KK & Akta Kelahiran","Bersama","KUA / Kependudukan","Siapkan fotokopi KTP & KK calon pengantin, Akta Kelahiran, KTP orang tua, serta KTP 2 orang saksi."],
+  ["Fotokopi Ijazah Terakhir","Bersama","KUA / Kependudukan","Untuk verifikasi penulisan nama lengkap dan gelar pada dokumen nikah."],
+  ["Pas Foto Latar Biru / Merah (2x3, 3x4, 4x6)","Bersama","KUA / Kependudukan","KUA umumnya latar biru (2x3 & 4x6 masing-masing 4–5 lembar). Catatan Sipil foto berpasangan sesuai aturan daerah."],
+  ["Surat Rekomendasi / Numpang Nikah","Bersama","KUA / Kependudukan","Wajib diurus di KUA asal jika akad nikah dilangsungkan di luar kecamatan domisili KTP."],
+  ["Surat Keterangan Sehat & Suntik TT (Puskesmas)","Wanita","Kesehatan & BKKBN","Pemeriksaan kesehatan pra-nikah & imunisasi Tetanus Toksoid (TT) di Puskesmas."],
+  ["Sertifikat Elsimil (BKKBN)","Bersama","Kesehatan & BKKBN","Daftar di aplikasi Elsimil BKKBN dan unggah hasil pemeriksaan kesehatan sebelum mendaftar ke KUA."],
+  ["Pendaftaran Online Simkah Web / KUA (Muslim)","Bersama","KUA / Kependudukan","Daftar jadwal akad di simkah4.kemenag.go.id lalu serahkan berkas fisik ke KUA minimal H-10."],
+  ["Pembayaran PNBP Biaya Nikah (Luar KUA)","Bersama","KUA / Kependudukan","Gratis jika akad di KUA saat jam kerja; Rp600.000 (kode billing Simponi) jika di luar KUA atau di luar jam kerja."],
+  ["Bimbingan Perkawinan (Bimwin / Kursus Pra-Nikah)","Bersama","KUA / Kependudukan","Ikuti bimbingan pranikah dari KUA atau lembaga keagamaan masing-masing untuk mendapat sertifikat."],
+  ["Surat Pemberkatan & Akta Perkawinan Dukcapil (Non-Muslim)","Bersama","Catatan Sipil","Urus surat pemberkatan agama lalu catatkan perkawinan di Disdukcapil dengan 2 orang saksi."],
+  ["Akta Cerai / Akta Kematian N6 (Jika Pernah Menikah)","Bersama","KUA / Kependudukan","Opsional: wajib melampirkan Akta Cerai asli atau Surat Kematian pasangan terdahulu (N6)."],
+  ["Surat Izin Kesatuan (TNI/Polri) / CNI (WNA)","Bersama","KUA / Kependudukan","Opsional: khusus anggota TNI/Polri wajib izin komandan; WNA wajib CNI dari kedutaan & paspor/visa."],
+  ["Perjanjian Pranikah / Pisah Harta (Notaris)","Bersama","Pra & Pasca Nikah","Opsional: dibuat di notaris dan didaftarkan ke KUA atau Disdukcapil sebelum hari pernikahan."],
+  ["Pembaruan Kartu Keluarga & KTP-el Baru","Bersama","Pra & Pasca Nikah","Setelah sah menikah, urus pemisahan/pembuatan KK baru dan ubah status di KTP-el."]
+];
 
 if (location.search.includes("v=")) {
   try {
@@ -457,6 +494,9 @@ function newData() {
     guests: [],
     seserahan: SESERAHAN_PRESET.map(([name,side,category,estimated])=>({
       id:uid(),name,side,category,estimated,actual:0,status:"Belum dibeli",note:""
+    })),
+    administrasi: ADMINISTRASI_PRESET.map(([name,forWhom,category,note])=>({
+      id:uid(),name,forWhom,category,due:"",status:"Belum diurus",note
     }))
   };
 }
@@ -464,7 +504,7 @@ function normalizeData(input) {
   const d = newData();
   if (!input || typeof input !== "object") return d;
   if (typeof input.weddingDate === "string") d.weddingDate = input.weddingDate;
-  for (const key of ["budget","expenses","payments","checklist","vendors","guests","seserahan"]) {
+  for (const key of ["budget","expenses","payments","checklist","vendors","guests","seserahan","administrasi"]) {
     if (Array.isArray(input[key])) d[key] = input[key];
   }
   return d;
@@ -518,6 +558,7 @@ let data = newData();
 let activeTab = "Ringkasan";
 let editingId = null;
 let seserahanFilter = "Semua";
+let administrasiFilter = "Semua";
 
 const fields = {
   budget: [
@@ -569,11 +610,20 @@ const fields = {
     ["actual","Harga realisasi (Rp)","number",false],
     ["status","Status","select",true,["Belum dibeli","Sudah dibeli","Sudah dihias"]],
     ["note","Catatan / Toko","textarea",false]
+  ],
+  administrasi: [
+    ["name","Nama dokumen / proses","text",true],
+    ["forWhom","Pihak","select",true,["Bersama","Pria","Wanita"]],
+    ["category","Kategori","select",true,["Kelurahan / RT-RW","KUA / Kependudukan","Kesehatan & BKKBN","Catatan Sipil","Pra & Pasca Nikah","Lainnya"]],
+    ["due","Target selesai","date",false],
+    ["status","Status","select",true,["Belum diurus","Sedang proses","Selesai"]],
+    ["note","Keterangan / Syarat","textarea",false]
   ]
 };
 const titles = {
   budget:"Anggaran", expenses:"Pengeluaran", payments:"Pembayaran Vendor",
-  checklist:"Checklist", vendors:"Vendor", guests:"Tamu", seserahan:"Seserahan"
+  checklist:"Checklist", vendors:"Vendor", guests:"Tamu",
+  seserahan:"Seserahan", administrasi:"Administrasi"
 };
 
 function navBadgeText(name) {
@@ -584,6 +634,7 @@ function navBadgeText(name) {
   if (name === "Vendor") return data.vendors.length;
   if (name === "Tamu") return data.guests.length;
   if (name === "Seserahan") return `${data.seserahan.filter(x=>x.status!=="Belum dibeli").length}/${data.seserahan.length}`;
+  if (name === "Administrasi") return `${data.administrasi.filter(x=>x.status==="Selesai").length}/${data.administrasi.length}`;
   return "";
 }
 
@@ -608,6 +659,7 @@ function render() {
   if(activeTab==="Vendor") app.innerHTML=vendorView();
   if(activeTab==="Tamu") app.innerHTML=guestView();
   if(activeTab==="Seserahan") app.innerHTML=seserahanView();
+  if(activeTab==="Administrasi") app.innerHTML=administrasiView();
 
   app.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>openItem(b.dataset.add)));
   app.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>removeItem(b.dataset.delete,b.dataset.id)));
@@ -617,6 +669,10 @@ function render() {
     seserahanFilter=b.dataset.seserahanFilter; render();
   }));
   app.querySelectorAll("[data-cycle-seserahan]").forEach(b=>b.addEventListener("click",()=>cycleSeserahan(b.dataset.cycleSeserahan)));
+  app.querySelectorAll("[data-adm-filter]").forEach(b=>b.addEventListener("click",()=>{
+    administrasiFilter=b.dataset.admFilter; render();
+  }));
+  app.querySelectorAll("[data-cycle-adm]").forEach(b=>b.addEventListener("click",()=>cycleAdministrasi(b.dataset.cycleAdm)));
 
   const dateInput=document.getElementById("weddingDateInput");
   if(dateInput) {
@@ -639,7 +695,7 @@ function budgetStats(cat) {
 
 // ===== SVG CHARTS =====
 function buildDonutSvg(items, centerLabel, centerValue) {
-  const r = 58, cx = 82, cy = 82, C = 2 * Math.PI * r;
+  const r = 56, cx = 78, cy = 78, C = 2 * Math.PI * r;
   const total = items.reduce((s, x) => s + Math.max(0, Number(x.value)||0), 0);
   let offset = 0;
   const circles = total > 0
@@ -663,7 +719,7 @@ function buildDonutSvg(items, centerLabel, centerValue) {
 
   return `<div class="donut-wrap">
     <div class="donut-svg">
-      <svg viewBox="0 0 164 164" width="164" height="164">
+      <svg viewBox="0 0 156 156" width="156" height="156">
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#eceee4" stroke-width="20" />
         <g transform="rotate(-90 ${cx} ${cy})">${circles}</g>
       </svg>
@@ -674,15 +730,15 @@ function buildDonutSvg(items, centerLabel, centerValue) {
 }
 
 function buildMiniRing(pct, color, title, sub) {
-  const r = 20, C = 2 * Math.PI * r;
+  const r = 19, C = 2 * Math.PI * r;
   const clamped = Math.max(0, Math.min(100, pct));
   const dash = (clamped / 100) * C;
   return `<div class="ring-box">
-    <svg viewBox="0 0 52 52" width="52" height="52">
-      <circle cx="26" cy="26" r="${r}" fill="none" stroke="#e4e7dc" stroke-width="5.5" />
-      <circle cx="26" cy="26" r="${r}" fill="none" stroke="${color}" stroke-width="5.5" stroke-linecap="round"
-        stroke-dasharray="${dash.toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 26 26)" />
-      <text x="26" y="30" text-anchor="middle" fill="#242a24" font-size="11" font-weight="700">${clamped}%</text>
+    <svg viewBox="0 0 48 48" width="48" height="48">
+      <circle cx="24" cy="24" r="${r}" fill="none" stroke="#e4e7dc" stroke-width="5" />
+      <circle cx="24" cy="24" r="${r}" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round"
+        stroke-dasharray="${dash.toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 24 24)" />
+      <text x="24" y="28" text-anchor="middle" fill="#242a24" font-size="10.5" font-weight="700">${clamped}%</text>
     </svg>
     <div><b>${esc(title)}</b><small>${esc(sub)}</small></div>
   </div>`;
@@ -734,6 +790,9 @@ function summaryView() {
   const sesPct=data.seserahan.length?Math.round(sesDone/data.seserahan.length*100):0;
   const sesSpent=data.seserahan.reduce((s,x)=>s+Number(x.actual||0),0);
 
+  const admDone=data.administrasi.filter(a=>a.status==="Selesai").length;
+  const admPct=data.administrasi.length?Math.round(admDone/data.administrasi.length*100):0;
+
   const useSpent = spent > 0;
   const donutBudgetItems = data.budget.map((b, idx) => {
     const val = useSpent ? budgetStats(b).spent : Number(b.amount||0);
@@ -775,7 +834,7 @@ function summaryView() {
       <div class="card purple"><label>Total Pengeluaran</label><strong>${money(spent)}</strong><div class="progress"><i class="${spent>total?"over":""}" style="width:${Math.min(spentPct,100)}%"></i></div></div>
       <div class="card blue"><label>Pembayaran Vendor</label><strong>${money(paid)}</strong><small>Kontrak: ${money(contractTotal)}</small></div>
       <div class="card"><label>Tamu Hadir</label><strong>${guestHadPeople} orang</strong><small>${data.guests.length} undangan (${guestTotalPeople} org)</small></div>
-      <div class="card"><label>Seserahan</label><strong>${sesDone}/${data.seserahan.length} siap</strong><small>Terpakai: ${money(sesSpent)}</small></div>
+      <div class="card"><label>Seserahan &amp; Berkas</label><strong>${sesDone}/${data.seserahan.length} siap</strong><small>Administrasi: ${admDone}/${data.administrasi.length} selesai (${money(sesSpent)})</small></div>
     </section>
 
     <section class="charts-grid">
@@ -804,6 +863,7 @@ function summaryView() {
         <div class="rings-row">
           ${buildMiniRing(checkPct, "#9e3b5c", "Checklist", `${done}/${data.checklist.length} selesai`)}
           ${buildMiniRing(sesPct, "#4f774c", "Seserahan", `${sesDone}/${data.seserahan.length} siap`)}
+          ${buildMiniRing(admPct, "#c99746", "Administrasi", `${admDone}/${data.administrasi.length} selesai`)}
         </div>
       </div>
     </section>
@@ -971,6 +1031,57 @@ function seserahanView() {
         </div>
       </div>
       ${makeTable(["Barang","Pihak","Kategori","Estimasi","Realisasi","Status","Aksi"], rows)}
+    </section>`;
+}
+
+function administrasiView() {
+  const list = administrasiFilter === "Semua"
+    ? data.administrasi
+    : data.administrasi.filter(x => (x.status || "Belum diurus") === administrasiFilter);
+
+  const total = data.administrasi.length;
+  const selesai = data.administrasi.filter(x => x.status === "Selesai").length;
+  const proses = data.administrasi.filter(x => x.status === "Sedang proses").length;
+  const belum = data.administrasi.filter(x => (x.status || "Belum diurus") === "Belum diurus").length;
+  const pct = total ? Math.round(selesai / total * 100) : 0;
+
+  const rows = list.map(x => {
+    const st = x.status || "Belum diurus";
+    const cls = st === "Selesai" ? "selesai" : st === "Sedang proses" ? "proses" : "belum";
+    return `<tr>
+      <td><strong>${esc(x.name)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
+      <td>${esc(x.forWhom||"Bersama")}</td>
+      <td>${esc(x.category||"-")}</td>
+      <td>${esc(x.due||"-")}</td>
+      <td><button type="button" class="badge clickable ${cls}" data-cycle-adm="${esc(x.id)}" title="Klik untuk ubah status">${esc(st)}</button></td>
+      <td class="row-actions"><button data-edit="administrasi" data-id="${esc(x.id)}">Ubah</button><button data-delete="administrasi" data-id="${esc(x.id)}">Hapus</button></td>
+    </tr>`;
+  }).join("");
+
+  const filters = ["Semua","Belum diurus","Sedang proses","Selesai"].map(f =>
+    `<button type="button" class="btn small filter ${administrasiFilter===f?"active":""}" data-adm-filter="${esc(f)}">${esc(f)}</button>`
+  ).join("");
+
+  return `
+    <section class="cards">
+      <div class="card highlight"><label>Total Berkas &amp; Proses</label><strong>${total} item</strong><small>Kelengkapan nikah &amp; kependudukan</small></div>
+      <div class="card green"><label>Selesai Diurus</label><strong>${selesai}/${total}</strong><div class="progress"><i style="width:${pct}%"></i></div></div>
+      <div class="card blue"><label>Sedang Proses</label><strong>${proses} item</strong><small>Menunggu penerbitan / jadwal</small></div>
+      <div class="card purple"><label>Belum Diurus</label><strong>${belum} item</strong><small>Hapus jika tidak relevan (mis. KUA/Dukcapil)</small></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Daftar Administrasi Pernikahan</h2>
+          <span class="muted">Klik status untuk mengganti (Belum diurus → Sedang proses → Selesai).</span>
+        </div>
+        <div class="toolbar">
+          ${filters}
+          <button class="btn gold" data-add="administrasi">＋ Tambah dokumen</button>
+        </div>
+      </div>
+      ${makeTable(["Dokumen / Proses","Pihak","Kategori","Target","Status","Aksi"], rows)}
     </section>`;
 }
 
@@ -1209,6 +1320,16 @@ async function cycleSeserahan(id) {
     data.seserahan=data.seserahan.map(x=>{
       if(x.id!==id) return x;
       const next=order[(order.indexOf(x.status||"Belum dibeli")+1)%order.length];
+      return {...x,status:next};
+    });
+  });
+}
+async function cycleAdministrasi(id) {
+  const order=["Belum diurus","Sedang proses","Selesai"];
+  await changeData(()=>{
+    data.administrasi=data.administrasi.map(x=>{
+      if(x.id!==id) return x;
+      const next=order[(order.indexOf(x.status||"Belum diurus")+1)%order.length];
       return {...x,status:next};
     });
   });
