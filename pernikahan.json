@@ -4,7 +4,7 @@
     {
       "id": "89f0be6b-8ea7-4969-95ee-5a580ce909d2",
       "name": "Gedung/Venue",
-      "amount": 25000000
+      "amount": 5000000
     },
     {
       "id": "397038d1-633a-49f9-a4c3-08077eb86b06",
@@ -262,6 +262,161 @@
       "actual": 0,
       "status": "Belum dibeli",
       "note": ""
+    }
+  ],
+  "administrasi": [
+    {
+      "id": "1fe721bc-bb3b-4e22-b205-659ff940bfa1",
+      "name": "Surat Pengantar RT & RW",
+      "forWhom": "Bersama",
+      "category": "Kelurahan / RT-RW",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Minta pengantar dari RT/RW masing-masing calon pengantin untuk mengurus surat ke kelurahan."
+    },
+    {
+      "id": "6f1a663e-f5e6-45ba-b49c-3189e0aa1893",
+      "name": "Formulir N1, N2 & N4 dari Kelurahan/Desa",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Surat Pengantar Nikah (N1), Permohonan Kehendak Nikah (N2), dan Persetujuan Calon Pengantin (N4)."
+    },
+    {
+      "id": "22039f87-5f9b-4892-9e0b-9c3af9b161c2",
+      "name": "Formulir N5 (Surat Izin Orang Tua)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Wajib dilampirkan jika usia calon pengantin masih di bawah 21 tahun."
+    },
+    {
+      "id": "aa152db1-25e6-4ab4-af73-88afe3ccb94e",
+      "name": "Fotokopi KTP, KK & Akta Kelahiran",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Siapkan fotokopi KTP & KK calon pengantin, Akta Kelahiran, KTP orang tua, serta KTP 2 orang saksi."
+    },
+    {
+      "id": "407c8496-3fb6-495e-ba31-43e2a00da415",
+      "name": "Fotokopi Ijazah Terakhir",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Untuk verifikasi penulisan nama lengkap dan gelar pada dokumen nikah."
+    },
+    {
+      "id": "a449749e-0434-4a54-9b7b-75e6fbef7e9e",
+      "name": "Pas Foto Latar Biru / Merah (2x3, 3x4, 4x6)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "KUA umumnya latar biru (2x3 & 4x6 masing-masing 4–5 lembar). Catatan Sipil foto berpasangan sesuai aturan daerah."
+    },
+    {
+      "id": "0ccf8542-e153-4d5b-93a3-11068c27fd48",
+      "name": "Surat Rekomendasi / Numpang Nikah",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Wajib diurus di KUA asal jika akad nikah dilangsungkan di luar kecamatan domisili KTP."
+    },
+    {
+      "id": "5b10723d-a868-49ed-b73d-c363e9b91d32",
+      "name": "Surat Keterangan Sehat & Suntik TT (Puskesmas)",
+      "forWhom": "Wanita",
+      "category": "Kesehatan & BKKBN",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Pemeriksaan kesehatan pra-nikah & imunisasi Tetanus Toksoid (TT) di Puskesmas."
+    },
+    {
+      "id": "fc3006e3-9ff1-4203-b775-3460493f9fe0",
+      "name": "Sertifikat Elsimil (BKKBN)",
+      "forWhom": "Bersama",
+      "category": "Kesehatan & BKKBN",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Daftar di aplikasi Elsimil BKKBN dan unggah hasil pemeriksaan kesehatan sebelum mendaftar ke KUA."
+    },
+    {
+      "id": "d607adfd-3f02-471f-ac13-1180ed674dba",
+      "name": "Pendaftaran Online Simkah Web / KUA (Muslim)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Daftar jadwal akad di simkah4.kemenag.go.id lalu serahkan berkas fisik ke KUA minimal H-10."
+    },
+    {
+      "id": "35f3becb-f442-4075-bf76-b4e788aaaec2",
+      "name": "Pembayaran PNBP Biaya Nikah (Luar KUA)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Gratis jika akad di KUA saat jam kerja; Rp600.000 (kode billing Simponi) jika di luar KUA atau di luar jam kerja."
+    },
+    {
+      "id": "eefd6245-9416-4714-bcc7-e193452594c6",
+      "name": "Bimbingan Perkawinan (Bimwin / Kursus Pra-Nikah)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Ikuti bimbingan pranikah dari KUA atau lembaga keagamaan masing-masing untuk mendapat sertifikat."
+    },
+    {
+      "id": "de5d0c3b-8daf-423f-a8ac-581ee79e4dac",
+      "name": "Surat Pemberkatan & Akta Perkawinan Dukcapil (Non-Muslim)",
+      "forWhom": "Bersama",
+      "category": "Catatan Sipil",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Urus surat pemberkatan agama lalu catatkan perkawinan di Disdukcapil dengan 2 orang saksi."
+    },
+    {
+      "id": "3a738860-99f6-4a08-954f-d9c25a9b49c5",
+      "name": "Akta Cerai / Akta Kematian N6 (Jika Pernah Menikah)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Opsional: wajib melampirkan Akta Cerai asli atau Surat Kematian pasangan terdahulu (N6)."
+    },
+    {
+      "id": "e9c5affb-5e1a-4a59-a232-be29247c6a71",
+      "name": "Surat Izin Kesatuan (TNI/Polri) / CNI (WNA)",
+      "forWhom": "Bersama",
+      "category": "KUA / Kependudukan",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Opsional: khusus anggota TNI/Polri wajib izin komandan; WNA wajib CNI dari kedutaan & paspor/visa."
+    },
+    {
+      "id": "01a14b52-0978-4b1e-8ea6-e4e0d6119d27",
+      "name": "Perjanjian Pranikah / Pisah Harta (Notaris)",
+      "forWhom": "Bersama",
+      "category": "Pra & Pasca Nikah",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Opsional: dibuat di notaris dan didaftarkan ke KUA atau Disdukcapil sebelum hari pernikahan."
+    },
+    {
+      "id": "9c16a16a-d178-4fe0-99e6-3bce94dc3fbd",
+      "name": "Pembaruan Kartu Keluarga & KTP-el Baru",
+      "forWhom": "Bersama",
+      "category": "Pra & Pasca Nikah",
+      "due": "",
+      "status": "Belum diurus",
+      "note": "Setelah sah menikah, urus pemisahan/pembuatan KK baru dan ubah status di KTP-el."
     }
   ]
 }
