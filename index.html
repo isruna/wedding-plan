@@ -1,40 +1,350 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wedding Plan</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: #f9f5f2;
-        color: #333;
-      }
-      .container {
-        max-width: 800px;
-        margin: 60px auto;
-        padding: 30px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      }
-      h1 {
-        text-align: center;
-        color: #7a4b4b;
-      }
-      p {
-        line-height: 1.7;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Our Wedding</h1>
-      <p>Welcome to our wedding page! We are excited to celebrate this special day with our family and friends.</p>
-      <p><strong>Date:</strong> TBD</p>
-      <p><strong>Location:</strong> TBD</p>
-      <p><strong>Theme:</strong> Elegant and memorable</p>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wedding Planner</title>
+  <style>
+    :root {
+      --bg:#101115; --panel:#191a20; --panel2:#202129; --line:#30313a;
+      --text:#f5f3ed; --muted:#a4a3aa; --gold:#d7b56d; --gold2:#f0d899;
+      --red:#e67777; --green:#78c69c;
+    }
+    * { box-sizing:border-box }
+    body { margin:0; background:var(--bg); color:var(--text); font:14px/1.5 Inter,system-ui,Arial,sans-serif }
+    button,input,select,textarea { font:inherit }
+    button { cursor:pointer }
+    .layout { min-height:100vh; display:flex }
+    aside { width:245px; flex-shrink:0; background:#15161b; border-right:1px solid var(--line); padding:26px 16px; display:flex; flex-direction:column }
+    .brand { padding:0 12px 26px; font-size:19px; font-weight:750; color:var(--gold2) }
+    .brand small { display:block; color:var(--muted); font-size:11px; font-weight:400; margin-top:3px }
+    nav { display:grid; gap:7px }
+    nav button { text-align:left; border:0; color:#c1c0c5; background:transparent; padding:12px 13px; border-radius:10px }
+    nav button:hover, nav button.active { color:var(--gold2); background:#292720 }
+    .side-note { margin-top:auto; padding:15px 12px 0; color:var(--muted); font-size:12px }
+    main { flex:1; min-width:0; padding:30px clamp(18px,4vw,55px); max-width:1600px; margin:0 auto; width:100% }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:28px }
+    h1 { font-size:25px; margin:0 0 4px }
+    .sub { color:var(--muted) }
+    .actions { display:flex; gap:9px; flex-wrap:wrap }
+    .btn { color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:9px 13px }
+    .btn:hover { border-color:var(--gold) }
+    .btn.gold { background:var(--gold); color:#211c10; border-color:var(--gold); font-weight:700 }
+    .btn.danger { color:#ffaaaa }
+    .cards { display:grid; grid-template-columns:repeat(4,minmax(150px,1fr)); gap:16px; margin-bottom:24px }
+    .card { border:1px solid #ffffff12; border-radius:14px; padding:19px; background:linear-gradient(135deg,#4c3b20,#29231c 75%,#201f24) }
+    .card:nth-child(2) { background:linear-gradient(135deg,#23463a,#202b2b) }
+    .card:nth-child(3) { background:linear-gradient(135deg,#45344d,#28232f) }
+    .card:nth-child(4) { background:linear-gradient(135deg,#3b3b48,#25262d) }
+    .card label { color:#e0d4b6; font-size:12px }
+    .card strong { display:block; font-size:22px; margin-top:8px }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:20px; margin-bottom:20px }
+    .panel-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:15px }
+    h2 { font-size:16px; margin:0 }
+    .table-wrap { overflow:auto }
+    table { width:100%; border-collapse:collapse; min-width:650px }
+    th,td { padding:13px 12px; text-align:left; border-bottom:1px solid var(--line); vertical-align:middle }
+    th { color:var(--muted); font-size:12px; font-weight:600 }
+    td { color:#e9e8e4 }
+    tr:last-child td { border-bottom:0 }
+    .muted { color:var(--muted) }
+    .badge { display:inline-block; border-radius:20px; padding:4px 9px; background:#30313a; color:#d8d7dc; font-size:12px }
+    .badge.done,.badge.lunas,.badge.hadir { background:#1e3c30; color:#8ed6ad }
+    .badge.pending,.badge.belum { background:#453a22; color:#e6c77e }
+    .badge.batal,.badge.tidak { background:#482a2b; color:#ef9e9e }
+    .progress { height:8px; background:#30313a; border-radius:9px; overflow:hidden; margin-top:10px }
+    .progress i { display:block; height:100%; background:var(--gold); border-radius:9px }
+    .empty { padding:28px; color:var(--muted); text-align:center }
+    .taskline { display:flex; align-items:center; gap:10px }
+    .taskline input { accent-color:var(--gold) }
+    .row-actions { white-space:nowrap }
+    .row-actions button { border:0; background:none; color:var(--muted); padding:5px }
+    .row-actions button:hover { color:var(--red) }
+    .notice { padding:11px 14px; border-radius:9px; background:#282720; color:#e6d59e; margin-bottom:18px }
+    dialog { width:min(520px,calc(100% - 28px)); border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:14px; padding:22px }
+    dialog::backdrop { background:#000a }
+    dialog h2 { margin-bottom:16px }
+    .fields { display:grid; gap:12px }
+    .field label { display:block; color:var(--muted); margin-bottom:5px; font-size:12px }
+    .field input,.field select,.field textarea { width:100%; background:#101115; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:10px }
+    .field textarea { min-height:75px; resize:vertical }
+    .dialog-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:18px }
+    .toast { position:fixed; right:20px; bottom:20px; background:#292a30; border:1px solid var(--line); border-radius:10px; padding:12px 16px; display:none; z-index:10 }
+    @media(max-width:800px) {
+      .layout { display:block } aside { width:auto; padding:12px; border-right:0; border-bottom:1px solid var(--line) }
+      .brand { padding:4px 8px 12px } nav { display:flex; overflow:auto } nav button { white-space:nowrap }
+      .side-note { display:none } main { padding:22px 14px }
+      .cards { grid-template-columns:repeat(2,minmax(130px,1fr)); gap:10px }
+      .card { padding:15px } .card strong { font-size:18px }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">✦ Wedding Planner<small>Rencana hari istimewa</small></div>
+    <nav id="nav"></nav>
+    <div class="side-note">Data tersimpan di GitHub dan cache browser.</div>
+  </aside>
+  <main>
+    <div class="top">
+      <div>
+        <h1 id="pageTitle">Ringkasan</h1>
+        <div class="sub" id="syncStatus">Memuat data…</div>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="loadData()">↻ Sinkronkan</button>
+        <button class="btn" onclick="openConfig()">⚙ GitHub</button>
+      </div>
     </div>
-  </body>
+    <div id="app"></div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<dialog id="configDialog">
+  <form id="configForm">
+    <h2>Konfigurasi GitHub</h2>
+    <div class="fields">
+      <div class="field"><label>GitHub Username / Owner</label><input name="owner" required></div>
+      <div class="field"><label>Nama repository</label><input name="repo" required></div>
+      <div class="field"><label>Path file JSON</label><input name="path" value="pernikahan.json" required></div>
+      <div class="field"><label>Personal Access Token</label><input name="token" type="password" required autocomplete="off"></div>
+      <div class="muted">Token disimpan di localStorage browser ini. Batasi izin token hanya ke repository yang digunakan.</div>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="btn" onclick="configDialog.close()">Batal</button>
+      <button class="btn gold">Simpan & Muat</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="itemDialog">
+  <form id="itemForm">
+    <h2 id="itemTitle">Tambah data</h2>
+    <div class="fields" id="itemFields"></div>
+    <div class="dialog-actions">
+      <button type="button" class="btn" onclick="itemDialog.close()">Batal</button>
+      <button class="btn gold">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const categories = [
+  ["Gedung/Venue",25000000],["Katering",60000000],["Dekorasi",15000000],
+  ["Fotografi & Videografi",12000000],["Rias & Busana",8000000],
+  ["Undangan & Cetak",2000000],["Musik/Hiburan",5000000],["Lain-lain",5000000]
+];
+const tasks = [
+  "Tentukan tanggal pernikahan","Tentukan total anggaran","Buat daftar tamu awal",
+  "Booking gedung/venue","Booking katering dan cek menu tasting",
+  "Booking fotografer dan videografer","Booking dekorasi",
+  "Booking MC, musik, atau hiburan","Booking rias pengantin dan busana",
+  "Pesan undangan dan cetak","Kirim undangan ke tamu","Pantau RSVP tamu",
+  "Ajukan izin dan urus surat-surat administrasi","Fitting busana dan jas",
+  "Siapkan denah meja dan kartu nama","Konfirmasi ulang semua vendor (H-30)",
+  "Kirim rundown ke semua vendor (H-7)","Gladi bersih (H-1)",
+  "Siapkan perlengkapan darurat"
+];
+const tabs = ["Ringkasan","Anggaran","Pengeluaran","Pembayaran Vendor","Checklist","Vendor","Tamu"];
+const defaultData = () => ({
+  budget: categories.map(([name,amount]) => ({id:uid(),name,amount})),
+  expenses: [], payments: [],
+  checklist: tasks.map(task => ({id:uid(),task,done:false,due:""})),
+  vendors: [], guests: []
+});
+let data = defaultData(), activeTab = "Ringkasan", editingId = null, config = {};
+
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random().toString(16).slice(2));
+const rupiah = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cacheKey = "wedding-planner-data-v1";
+const configKey = "wedding-planner-github-config";
+
+function notify(msg) {
+  const t=document.getElementById("toast"); t.textContent=msg; t.style.display="block";
+  setTimeout(()=>t.style.display="none",3000);
+}
+function setStatus(s){ document.getElementById("syncStatus").textContent=s; }
+function normalize(d) {
+  const base=defaultData();
+  for(const k of Object.keys(base)) if(Array.isArray(d?.[k])) base[k]=d[k];
+  return base;
+}
+function saveCache(){ localStorage.setItem(cacheKey,JSON.stringify(data)); }
+function encodeBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function decodeBase64(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,"")))); }
+
+function openConfig(){
+  config=JSON.parse(localStorage.getItem(configKey)||"{}");
+  const f=document.getElementById("configForm");
+  f.owner.value=config.owner||""; f.repo.value=config.repo||"";
+  f.path.value=config.path||"pernikahan.json"; f.token.value=config.token||"";
+  configDialog.showModal();
+}
+document.getElementById("configForm").addEventListener("submit",async e=>{
+  e.preventDefault(); const f=e.currentTarget;
+  config={owner:f.owner.value.trim(),repo:f.repo.value.trim(),path:f.path.value.trim(),token:f.token.value.trim()};
+  localStorage.setItem(configKey,JSON.stringify(config)); configDialog.close(); await loadData();
+});
+
+async function githubRequest(method,body){
+  const url=`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${config.path.split("/").map(encodeURIComponent).join("/")}`;
+  const res=await fetch(url,{method,headers:{
+    "Accept":"application/vnd.github+json","Authorization":`Bearer ${config.token}`,
+    "X-GitHub-Api-Version":"2022-11-28","Content-Type":"application/json"
+  },body:body?JSON.stringify(body):undefined});
+  const result=await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(result.message||`GitHub API error (${res.status})`);
+  return result;
+}
+async function loadData(){
+  config=JSON.parse(localStorage.getItem(configKey)||"{}");
+  const cached=localStorage.getItem(cacheKey);
+  if(cached) { try{data=normalize(JSON.parse(cached));}catch{} }
+  render();
+  if(!config.owner||!config.repo||!config.token){setStatus("Mode lokal — atur GitHub untuk sinkronisasi");return;}
+  setStatus("Mengambil data dari GitHub…");
+  try {
+    const file=await githubRequest("GET");
+    data=normalize(JSON.parse(decodeBase64(file.content)));
+    saveCache(); render(); setStatus("Tersinkron dengan GitHub");
+  } catch(err) {
+    if(err.message.includes("Not Found")){
+      try { await persist(); setStatus("File dibuat di GitHub"); }
+      catch(e){ setStatus("Cache lokal — "+e.message); }
+    } else setStatus("Cache lokal — "+err.message);
+  }
+}
+async function persist(){
+  saveCache();
+  if(!config.owner||!config.repo||!config.token){setStatus("Tersimpan di browser (belum tersinkron)");return;}
+  setStatus("Menyimpan ke GitHub…");
+  const path=config.path||"pernikahan.json";
+  let sha;
+  try { sha=(await githubRequest("GET")).sha; } catch(e) {
+    if(!e.message.includes("Not Found")) throw e;
+  }
+  const payload={message:"Update wedding planner data",content:encodeBase64(JSON.stringify(data,null,2))};
+  if(sha) payload.sha=sha;
+  await githubRequest("PUT",payload);
+  setStatus("Tersimpan & tersinkron dengan GitHub");
+}
+async function mutate(fn){
+  fn(); render(); saveCache();
+  try { await persist(); notify("Data berhasil disimpan"); }
+  catch(e){ setStatus("Tersimpan di browser — gagal sinkron: "+e.message); notify("Tersimpan lokal; sinkronisasi gagal"); }
+}
+
+function renderNav(){
+  document.getElementById("nav").innerHTML=tabs.map(t=>
+    `<button class="${activeTab===t?"active":""}" onclick="go('${t}')">${t}</button>`).join("");
+}
+function go(t){activeTab=t;render();}
+function render(){
+  renderNav(); document.getElementById("pageTitle").textContent=activeTab;
+  const app=document.getElementById("app");
+  if(activeTab==="Ringkasan") app.innerHTML=summary();
+  else if(activeTab==="Anggaran") app.innerHTML=budgetView();
+  else if(activeTab==="Pengeluaran") app.innerHTML=expenseView();
+  else if(activeTab==="Pembayaran Vendor") app.innerHTML=paymentView();
+  else if(activeTab==="Checklist") app.innerHTML=checklistView();
+  else if(activeTab==="Vendor") app.innerHTML=vendorView();
+  else app.innerHTML=guestView();
+}
+function table(headers,rows){
+  return `<div class="table-wrap"><table><thead><tr>${headers.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows||`<tr><td colspan="${headers.length}" class="empty">Belum ada data.</td></tr>`}</tbody></table></div>`;
+}
+function summary(){
+  const total=data.budget.reduce((a,x)=>a+Number(x.amount||0),0);
+  const spent=data.expenses.reduce((a,x)=>a+Number(x.amount||0),0);
+  const paid=data.payments.reduce((a,x)=>a+Number(x.paid||0),0);
+  const done=data.checklist.filter(x=>x.done).length;
+  const pct=data.checklist.length?Math.round(done/data.checklist.length*100):0;
+  return `<div class="cards">
+    <div class="card"><label>Total Anggaran</label><strong>${rupiah(total)}</strong></div>
+    <div class="card"><label>Total Pengeluaran</label><strong>${rupiah(spent)}</strong></div>
+    <div class="card"><label>Pembayaran Vendor</label><strong>${rupiah(paid)}</strong></div>
+    <div class="card"><label>Checklist Selesai</label><strong>${done}/${data.checklist.length}</strong><div class="progress"><i style="width:${pct}%"></i></div></div>
+  </div>
+  <section class="panel"><div class="panel-head"><h2>Ringkasan Anggaran</h2></div>
+  ${table(["Kategori","Anggaran","Pengeluaran"],data.budget.map(b=>{
+    const spentCat=data.expenses.filter(e=>e.category===b.name).reduce((a,e)=>a+Number(e.amount||0),0);
+    return `<tr><td>${esc(b.name)}</td><td>${rupiah(b.amount)}</td><td>${rupiah(spentCat)}</td></tr>`;
+  }).join(""))}</section>`;
+}
+function budgetView(){
+  const total=data.budget.reduce((a,x)=>a+Number(x.amount||0),0);
+  return `<div class="panel"><div class="panel-head"><h2>Anggaran per Kategori · Total ${rupiah(total)}</h2><button class="btn gold" onclick="addItem('budget')">＋ Tambah kategori</button></div>
+  ${table(["Kategori","Anggaran","Aksi"],data.budget.map(x=>`<tr><td>${esc(x.name)}</td><td>${rupiah(x.amount)}</td><td class="row-actions"><button onclick="editItem('budget','${x.id}')">Ubah</button><button onclick="removeItem('budget','${x.id}')">Hapus</button></td></tr>`).join(""))}</div>`;
+}
+function expenseView(){
+  return `<div class="panel"><div class="panel-head"><h2>Daftar Pengeluaran</h2><button class="btn gold" onclick="addItem('expenses')">＋ Tambah pengeluaran</button></div>
+  ${table(["Tanggal","Deskripsi","Kategori","Jumlah","Aksi"],data.expenses.map(x=>`<tr><td>${esc(x.date||"-")}</td><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td>${rupiah(x.amount)}</td><td class="row-actions"><button onclick="removeItem('expenses','${x.id}')">Hapus</button></td></tr>`).join(""))}</div>`;
+}
+function paymentView(){
+  return `<div class="panel"><div class="panel-head"><h2>Pembayaran Vendor</h2><button class="btn gold" onclick="addItem('payments')">＋ Tambah pembayaran</button></div>
+  ${table(["Vendor","Total Kontrak","Sudah Dibayar","Jatuh Tempo","Status","Aksi"],data.payments.map(x=>`<tr><td>${esc(x.vendor)}</td><td>${rupiah(x.total)}</td><td>${rupiah(x.paid)}</td><td>${esc(x.due||"-")}</td><td><span class="badge ${Number(x.paid)>=Number(x.total)?"lunas":"pending"}">${Number(x.paid)>=Number(x.total)?"Lunas":"Belum lunas"}</span></td><td class="row-actions"><button onclick="removeItem('payments','${x.id}')">Hapus</button></td></tr>`).join(""))}</div>`;
+}
+function checklistView(){
+  return `<div class="panel"><div class="panel-head"><h2>Checklist Persiapan</h2><button class="btn gold" onclick="addItem('checklist')">＋ Tambah tugas</button></div>
+  ${table(["Tugas","Tenggat","Status","Aksi"],data.checklist.map(x=>`<tr><td><label class="taskline"><input type="checkbox" ${x.done?"checked":""} onchange="toggleTask('${x.id}',this.checked)"><span>${esc(x.task)}</span></label></td><td>${esc(x.due||"-")}</td><td><span class="badge ${x.done?"done":"pending"}">${x.done?"Selesai":"Belum"}</span></td><td class="row-actions"><button onclick="removeItem('checklist','${x.id}')">Hapus</button></td></tr>`).join(""))}</div>`;
+}
+function vendorView(){
+  return `<div class="panel"><div class="panel-head"><h2>Daftar Vendor</h2><button class="btn gold" onclick="addItem('vendors')">＋ Tambah vendor</button></div>
+  ${table(["Nama Vendor","Kategori","Kontak","Harga","Catatan","Aksi"],data.vendors.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td>${esc(x.contact)}</td><td>${rupiah(x.price)}</td><td>${esc(x.note||"-")}</td><td class="row-actions"><button onclick="removeItem('vendors','${x.id}')">Hapus</button></td></tr>`).join(""))}</div>`;
+}
+function guestView(){
+  return `<div class="panel"><div class="panel-head"><h2>Daftar Tamu</h2><button class="btn gold" onclick="addItem('guests')">＋ Tambah tamu</button></div>
+  ${table(["Nama","Kontak","Jumlah","RSVP","Aksi"],data.guests.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.contact||"-")}</td><td>${esc(x.count||1)}</td><td><span class="badge ${x.rsvp==="Hadir"?"hadir":x.rsvp==="Tidak hadir"?"tidak":"pending"}">${esc(x.rsvp||"Belum konfirmasi")}</span></td><td class="row-actions"><button onclick="removeItem('guests','${x.id}')">Hapus</button></td></tr>`).join(""))}</div>`;
+}
+
+const fields={
+  budget:[["name","Nama kategori","text"],["amount","Anggaran (Rp)","number"]],
+  expenses:[["name","Deskripsi pengeluaran","text"],["category","Kategori","select"],["amount","Jumlah (Rp)","number"],["date","Tanggal","date"]],
+  payments:[["vendor","Nama vendor","text"],["total","Total kontrak (Rp)","number"],["paid","Sudah dibayar (Rp)","number"],["due","Jatuh tempo","date"]],
+  checklist:[["task","Nama tugas","text"],["due","Tenggat","date"]],
+  vendors:[["name","Nama vendor","text"],["category","Kategori","text"],["contact","Kontak","text"],["price","Harga (Rp)","number"],["note","Catatan","textarea"]],
+  guests:[["name","Nama tamu","text"],["contact","Kontak","text"],["count","Jumlah orang","number"],["rsvp","Status RSVP","select"]]
+};
+const labels={budget:"Anggaran",expenses:"Pengeluaran",payments:"Pembayaran Vendor",checklist:"Checklist",vendors:"Vendor",guests:"Tamu"};
+function addItem(key){ openItem(key,null); }
+function editItem(key,id){ openItem(key,data[key].find(x=>x.id===id)); }
+function openItem(key,item){
+  editingId=item?.id||null;
+  itemTitle.textContent=(item?"Ubah ":"Tambah ")+labels[key];
+  itemForm.dataset.key=key;
+  itemFields.innerHTML=fields[key].map(([name,label,type])=>{
+    let value=item?.[name]??"";
+    if(name==="category"&&type==="select"){
+      return `<div class="field"><label>${label}</label><select name="${name}" required>${data.budget.map(b=>`<option ${value===b.name?"selected":""}>${esc(b.name)}</option>`).join("")}</select></div>`;
+    }
+    if(name==="rsvp"&&type==="select"){
+      return `<div class="field"><label>${label}</label><select name="${name}">${["Belum konfirmasi","Hadir","Tidak hadir"].map(v=>`<option ${value===v?"selected":""}>${v}</option>`).join("")}</select></div>`;
+    }
+    if(type==="textarea") return `<div class="field"><label>${label}</label><textarea name="${name}">${esc(value)}</textarea></div>`;
+    return `<div class="field"><label>${label}</label><input name="${name}" type="${type}" ${type==="number"?'min="0" step="1"':''} value="${esc(value)}" ${name!=="note"?"required":""}></div>`;
+  }).join("");
+  itemDialog.showModal();
+}
+document.getElementById("itemForm").addEventListener("submit",e=>{
+  e.preventDefault(); const f=e.currentTarget,key=f.dataset.key, obj={};
+  for(const [name,,type] of fields[key]){
+    const el=f.elements[name]; obj[name]=type==="number"?Number(el.value||0):el.value.trim();
+  }
+  mutate(()=>{
+    if(editingId){data[key]=data[key].map(x=>x.id===editingId?{...x,...obj}:x);}
+    else data[key].push({id:uid(),...obj,...(key==="checklist"?{done:false}:{})});
+  });
+  itemDialog.close();
+});
+function toggleTask(id,done){mutate(()=>{data.checklist=data.checklist.map(x=>x.id===id?{...x,done}:x);});}
+function removeItem(key,id){
+  if(!confirm("Hapus data ini?")) return;
+  mutate(()=>{data[key]=data[key].filter(x=>x.id!==id);});
+}
+loadData();
+</script>
+</body>
 </html>
