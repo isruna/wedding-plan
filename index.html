@@ -3,101 +3,293 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Wedding Planner</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Wedding Planner — Matcha Berry</title>
   <style>
     :root {
-      --bg:#101115; --panel:#191a20; --panel2:#22232b; --line:#32333d;
-      --text:#f5f3ed; --muted:#a5a4ad; --gold:#d7b56d; --gold-light:#f0d899;
-      --red:#f08c8c; --green:#8ed6ad; --blue:#8eb8f0;
+      --bg:#f7f6f0;
+      --sidebar:#eef3ea;
+      --panel:#ffffff;
+      --panel2:#f4f6ef;
+      --line:#dfe3d5;
+      --text:#242a24;
+      --muted:#6c7469;
+      --matcha:#4f774c;
+      --matcha-soft:#e3ede0;
+      --matcha-deep:#365734;
+      --berry:#9e3b5c;
+      --berry-dark:#812b48;
+      --berry-soft:#faebf0;
+      --red:#b83253;
+      --green:#2d6e44;
+      --amber:#946214;
+      --shadow:0 2px 6px rgba(36,42,36,.04), 0 10px 26px rgba(79,119,76,.07);
     }
     * { box-sizing:border-box }
-    body { margin:0; background:var(--bg); color:var(--text); font:14px/1.5 system-ui,Arial,sans-serif }
+    body {
+      margin:0;
+      color:var(--text);
+      font:14px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(900px 440px at 95% -5%, rgba(158,59,92,.09), transparent 60%),
+        radial-gradient(750px 440px at 8% 100%, rgba(79,119,76,.11), transparent 60%),
+        var(--bg);
+    }
     button,input,select,textarea { font:inherit }
     button { cursor:pointer }
     .layout { display:flex; min-height:100vh }
-    aside { width:240px; flex-shrink:0; background:#15161b; border-right:1px solid var(--line); padding:24px 14px; display:flex; flex-direction:column }
-    .brand { color:var(--gold-light); font-size:19px; font-weight:750; padding:0 12px 22px }
-    .brand small { display:block; color:var(--muted); font-size:11px; font-weight:400; margin-top:2px }
-    nav { display:grid; gap:5px }
-    nav button { border:0; border-radius:9px; background:transparent; color:#c5c4ca; text-align:left; padding:11px 13px; transition:background .15s,color .15s }
-    nav button:hover, nav button.active { color:var(--gold-light); background:#292720 }
-    nav button.active { font-weight:600 }
-    .side-note { margin-top:auto; padding:18px 12px 0; color:var(--muted); font-size:11px; line-height:1.5 }
-    main { width:100%; max-width:1500px; margin:auto; padding:30px clamp(16px,4vw,54px); min-width:0 }
-    .top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:24px }
-    h1 { font-size:25px; margin:0 0 3px }
-    h2 { font-size:16px; margin:0 }
-    .muted,.sub { color:var(--muted) }
+
+    /* SIDEBAR */
+    aside {
+      width:252px; flex-shrink:0;
+      background:var(--sidebar);
+      border-right:1px solid var(--line);
+      padding:24px 14px;
+      display:flex; flex-direction:column;
+      position:sticky; top:0; height:100vh; overflow-y:auto;
+    }
+    .brand { padding:0 12px 20px; border-bottom:1px solid #d5ddd0; margin-bottom:16px }
+    .brand-title {
+      color:var(--berry);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:20px; font-weight:700; letter-spacing:.2px;
+    }
+    .brand small { display:block; color:var(--matcha-deep); font-size:11px; margin-top:3px }
+    nav { display:grid; gap:4px }
+    nav button {
+      border:1px solid transparent; border-radius:10px;
+      background:transparent; color:#3a4339;
+      text-align:left; padding:10px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      transition:all .15s ease;
+    }
+    nav button:hover { color:var(--text); background:#e2eadc }
+    nav button.active {
+      color:#fff;
+      background:linear-gradient(135deg, var(--berry), #b44b6d);
+      box-shadow:0 6px 14px rgba(158,59,92,.22);
+      font-weight:600;
+    }
+    .nav-label { display:flex; align-items:center; gap:9px; min-width:0 }
+    .nav-count {
+      font-size:11px; color:var(--matcha-deep);
+      background:#dde6d8; border-radius:999px; padding:2px 8px;
+      font-variant-numeric:tabular-nums;
+    }
+    nav button.active .nav-count { background:rgba(255,255,255,.24); color:#fff }
+    .side-note {
+      margin-top:auto; padding:16px 12px 0; border-top:1px solid #d5ddd0;
+      color:var(--muted); font-size:11px; line-height:1.5;
+    }
+
+    /* MAIN */
+    main { width:100%; max-width:1520px; margin:auto; padding:28px clamp(16px,3.5vw,48px); min-width:0 }
+    .top {
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:14px; margin-bottom:24px;
+    }
+    h1 {
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:28px; margin:0 0 6px; font-weight:700; color:var(--text);
+    }
+    h2 { font-size:16px; margin:0; font-weight:650; color:var(--text) }
+    .muted { color:var(--muted) }
+    .status-pill {
+      display:inline-flex; align-items:center; gap:7px;
+      font-size:12px; color:var(--muted);
+      background:var(--panel); border:1px solid var(--line);
+      border-radius:999px; padding:4px 12px;
+      box-shadow:0 2px 6px rgba(0,0,0,.03);
+    }
+    .status-dot { width:7px; height:7px; border-radius:50%; background:var(--muted) }
+    .status-pill.ok .status-dot { background:var(--matcha); box-shadow:0 0 6px rgba(79,119,76,.55) }
+    .status-pill.ok { color:var(--matcha-deep); border-color:#c6d9c2; background:#f2f8f0 }
+    .status-pill.warn .status-dot { background:#c78b2a }
+    .status-pill.warn { color:#7c5310; border-color:#ead9b4; background:#fdf8ec }
+    .status-pill.err .status-dot { background:var(--berry) }
+    .status-pill.err { color:var(--berry-dark); border-color:#e9c3cf; background:var(--berry-soft) }
+
     .actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center }
-    .btn { color:var(--text); background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:9px 13px; transition:border-color .15s }
-    .btn:hover { border-color:var(--gold) }
-    .btn.gold { background:var(--gold); color:#211c10; border-color:var(--gold); font-weight:700 }
-    .btn.gold:hover { background:var(--gold-light); border-color:var(--gold-light) }
+    .btn {
+      color:var(--text); background:var(--panel); border:1px solid var(--line);
+      border-radius:9px; padding:8px 13px; transition:all .15s;
+      display:inline-flex; align-items:center; gap:6px;
+      box-shadow:0 1px 2px rgba(0,0,0,.03);
+    }
+    .btn:hover { border-color:var(--matcha); background:var(--matcha-soft) }
+    .btn.gold {
+      background:var(--berry); color:#fff; border-color:var(--berry); font-weight:600;
+      box-shadow:0 4px 12px rgba(158,59,92,.2);
+    }
+    .btn.gold:hover { background:var(--berry-dark); border-color:var(--berry-dark) }
     .btn.small { padding:5px 10px; font-size:12px }
-    .btn.filter.active { background:#292720; color:var(--gold-light); border-color:var(--gold) }
-    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin-bottom:20px }
-    .card { border:1px solid #ffffff12; border-radius:13px; padding:18px; background:linear-gradient(135deg,#534122,#29231c 75%,#201f24) }
-    .card:nth-child(2) { background:linear-gradient(135deg,#23463a,#202b2b) }
-    .card:nth-child(3) { background:linear-gradient(135deg,#45344d,#28232f) }
-    .card:nth-child(4) { background:linear-gradient(135deg,#3b3b48,#25262d) }
-    .card:nth-child(5) { background:linear-gradient(135deg,#273c4d,#1f262e) }
-    .card:nth-child(6) { background:linear-gradient(135deg,#48372c,#262120) }
-    .card label { color:#e0d4b6; font-size:12px; display:block }
-    .card strong { display:block; font-size:21px; margin-top:7px }
+    .btn.filter.active { background:var(--berry-soft); color:var(--berry-dark); border-color:var(--berry); font-weight:600 }
+
+    /* CARDS */
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-bottom:20px }
+    .card {
+      border:1px solid var(--line);
+      border-radius:14px; padding:18px;
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      position:relative; overflow:hidden;
+    }
+    .card.highlight {
+      background:linear-gradient(135deg, #9e3b5c, #7b2944);
+      border-color:#9e3b5c;
+      color:#fff;
+    }
+    .card.highlight label, .card.highlight small { color:rgba(255,255,255,.85) }
+    .card.green { background:linear-gradient(145deg, #edf4ea, #ffffff); border-color:#cfe0ca }
+    .card.purple { background:linear-gradient(145deg, #faedf2, #ffffff); border-color:#eccfd9 }
+    .card.blue { background:linear-gradient(145deg, #f3f5eb, #ffffff); border-color:#dce1ce }
+    .card label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.06em; display:block; font-weight:600 }
+    .card strong { display:block; font-size:22px; margin-top:8px; font-variant-numeric:tabular-nums }
     .card small { display:block; color:var(--muted); font-size:12px; margin-top:4px }
-    .date-box { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px }
-    .date-box input[type=date] { background:#101115; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:8px 11px }
-    .panel { background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:19px; margin-bottom:18px }
-    .panel-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px }
+
+    /* DATE BANNER */
+    .date-box {
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+      background:linear-gradient(90deg, #f1f6ee, #fdf4f7);
+      border-color:#dce3d5;
+    }
+    .date-box input[type=date] {
+      background:#fff; color:var(--text); border:1px solid var(--line);
+      border-radius:9px; padding:9px 12px;
+    }
+    .date-box input[type=date]:focus { outline:none; border-color:var(--berry) }
+
+    /* PANELS & CHARTS */
+    .panel {
+      background:var(--panel); border:1px solid var(--line);
+      border-radius:14px; padding:20px; margin-bottom:18px;
+      box-shadow:var(--shadow);
+    }
+    .panel-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px }
     .toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center }
+
+    .charts-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:16px; margin-bottom:18px;
+    }
+    .chart-card {
+      background:var(--panel); border:1px solid var(--line);
+      border-radius:14px; padding:20px;
+      box-shadow:var(--shadow);
+      display:flex; flex-direction:column;
+    }
+    .chart-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:14px }
+    .chart-head span { font-size:12px; color:var(--muted) }
+
+    /* DONUT */
+    .donut-wrap { display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin:auto 0 }
+    .donut-svg { position:relative; width:164px; height:164px; flex-shrink:0 }
+    .donut-center {
+      position:absolute; inset:0; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; text-align:center; pointer-events:none;
+    }
+    .donut-center small { font-size:11px; color:var(--muted) }
+    .donut-center b { font-size:14px; font-variant-numeric:tabular-nums; margin-top:2px; color:var(--text) }
+    .legend { flex:1; min-width:150px; display:grid; gap:7px }
+    .legend-item { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:12px }
+    .legend-left { display:flex; align-items:center; gap:8px; min-width:0 }
+    .legend-dot { width:9px; height:9px; border-radius:3px; flex-shrink:0 }
+    .legend-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text) }
+    .legend-val { color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap }
+
+    /* BAR CHART */
+    .barchart { display:grid; gap:12px }
+    .bar-row { display:grid; gap:5px }
+    .bar-meta { display:flex; justify-content:space-between; gap:10px; font-size:12px }
+    .bar-meta strong { font-weight:600; color:var(--text) }
+    .bar-meta span { color:var(--muted); font-variant-numeric:tabular-nums }
+    .bar-tracks { display:grid; gap:4px }
+    .bar-track { height:7px; background:#ebede4; border-radius:999px; overflow:hidden }
+    .bar-fill { height:100%; border-radius:999px; transition:width .3s ease }
+    .bar-fill.est { background:#8db087 }
+    .bar-fill.real { background:var(--matcha-deep) }
+    .bar-fill.over { background:var(--berry) }
+
+    /* READINESS RINGS */
+    .rings-row { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line) }
+    .ring-box { display:flex; align-items:center; gap:12px; background:#f8faf6; border:1px solid var(--line); border-radius:12px; padding:12px }
+    .ring-box svg { flex-shrink:0 }
+    .ring-box b { display:block; font-size:15px; color:var(--text) }
+    .ring-box small { color:var(--muted); font-size:12px }
+
+    /* TABLE */
     .table-wrap { overflow:auto }
     table { width:100%; min-width:640px; border-collapse:collapse }
     th,td { padding:12px; text-align:left; border-bottom:1px solid var(--line); vertical-align:middle }
-    th { color:var(--muted); font-size:12px; font-weight:600; white-space:nowrap }
+    th {
+      color:var(--muted); font-size:11px; font-weight:700; white-space:nowrap;
+      text-transform:uppercase; letter-spacing:.05em; background:#f7f9f4;
+    }
+    tbody tr:hover { background:#fafbf8 }
     tr:last-child td { border-bottom:0 }
-    tfoot td { font-weight:700; border-top:1px solid var(--line); background:#1d1e25 }
-    tr.overdue td:first-child { box-shadow:inset 3px 0 0 var(--red) }
+    tfoot td { font-weight:700; border-top:1px solid var(--line); background:#f3f6ee }
+    tr.overdue td:first-child { box-shadow:inset 3px 0 0 var(--berry) }
     tr.done-row td { color:var(--muted) }
     tr.done-row .task-text { text-decoration:line-through }
     .empty { padding:24px; text-align:center; color:var(--muted) }
-    .badge { display:inline-block; border-radius:20px; padding:4px 10px; background:#30313a; font-size:12px; white-space:nowrap }
-    .badge.done,.badge.lunas,.badge.hadir,.badge.aman,.badge.dihias,.badge.sudah { background:#1e3c30; color:var(--green) }
-    .badge.pending,.badge.dibeli,.badge.dp,.badge.proses { background:#453a22; color:#e6c77e }
-    .badge.tidak,.badge.lebih,.badge.terlambat { background:#482a2b; color:#ef9e9e }
+    .badge { display:inline-block; border-radius:20px; padding:4px 10px; background:#eceee6; color:#4b5349; font-size:12px; font-weight:600; white-space:nowrap }
+    .badge.done,.badge.lunas,.badge.hadir,.badge.aman,.badge.dihias,.badge.sudah { background:#e2efe3; color:var(--green) }
+    .badge.pending,.badge.dibeli,.badge.dp,.badge.proses { background:#fdf1d6; color:var(--amber) }
+    .badge.tidak,.badge.lebih,.badge.terlambat { background:var(--berry-soft); color:var(--red) }
     .badge.clickable { cursor:pointer; border:1px solid transparent }
-    .badge.clickable:hover { border-color:var(--gold) }
+    .badge.clickable:hover { border-color:var(--berry) }
     .taskline { display:flex; align-items:center; gap:9px; cursor:pointer }
-    .taskline input { accent-color:var(--gold) }
+    .taskline input { accent-color:var(--matcha) }
     .row-actions { white-space:nowrap }
-    .row-actions button { color:var(--muted); border:0; background:none; padding:4px 7px; border-radius:6px }
-    .row-actions button[data-edit]:hover { color:var(--gold-light); background:#292720 }
-    .row-actions button[data-delete]:hover { color:var(--red); background:#352122 }
-    .progress { height:7px; background:#30313a; border-radius:9px; overflow:hidden; margin-top:9px; min-width:80px }
-    .progress i { display:block; height:100%; background:var(--gold); transition:width .2s }
-    .progress i.over { background:var(--red) }
+    .row-actions button { color:var(--muted); border:0; background:none; padding:5px 8px; border-radius:6px; font-weight:500 }
+    .row-actions button[data-edit]:hover { color:var(--matcha-deep); background:var(--matcha-soft) }
+    .row-actions button[data-delete]:hover { color:var(--red); background:var(--berry-soft) }
+    .progress { height:7px; background:#e7eadf; border-radius:9px; overflow:hidden; margin-top:9px; min-width:80px }
+    .progress i { display:block; height:100%; background:var(--matcha); transition:width .25s }
+    .progress i.over { background:var(--berry) }
     .prog-inline { display:flex; align-items:center; gap:8px }
     .prog-inline .progress { flex:1; margin-top:0 }
     .prog-inline small { color:var(--muted); width:38px; text-align:right }
     .num { font-variant-numeric:tabular-nums; white-space:nowrap }
-    dialog { width:min(520px,calc(100% - 24px)); border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:14px; padding:22px }
-    dialog::backdrop { background:#000a }
-    dialog h2 { margin-bottom:15px }
+
+    /* DIALOG & TOAST */
+    dialog {
+      width:min(520px,calc(100% - 24px));
+      border:1px solid var(--line); background:var(--panel); color:var(--text);
+      border-radius:16px; padding:24px; box-shadow:0 24px 60px rgba(36,42,36,.22);
+    }
+    dialog::backdrop { background:rgba(36,42,36,.35); backdrop-filter:blur(3px) }
+    dialog h2 { margin-bottom:15px; font-family:Georgia,"Times New Roman",serif; color:var(--berry) }
     .fields { display:grid; gap:12px }
-    .field label { display:block; color:var(--muted); font-size:12px; margin-bottom:5px }
-    .field input,.field select,.field textarea { width:100%; padding:10px; color:var(--text); background:#101115; border:1px solid var(--line); border-radius:8px }
-    .field input:focus,.field select:focus,.field textarea:focus { outline:none; border-color:var(--gold) }
+    .field label { display:block; color:var(--muted); font-size:12px; font-weight:600; margin-bottom:5px }
+    .field input,.field select,.field textarea {
+      width:100%; padding:10px; color:var(--text);
+      background:#fafbf8; border:1px solid var(--line); border-radius:8px;
+    }
+    .field input:focus,.field select:focus,.field textarea:focus { outline:none; border-color:var(--berry); background:#fff }
     .field textarea { min-height:70px; resize:vertical }
     .dialog-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:17px }
-    .toast { display:none; position:fixed; right:18px; bottom:18px; background:#292a30; border:1px solid var(--gold); border-radius:10px; padding:12px 15px; z-index:5; box-shadow:0 8px 24px #0008 }
-    @media(max-width:780px) {
+    .toast {
+      display:none; position:fixed; right:18px; bottom:18px;
+      background:#fff; color:var(--text); border:1px solid var(--berry);
+      border-radius:10px; padding:12px 16px; z-index:10;
+      box-shadow:0 10px 28px rgba(36,42,36,.16); font-weight:500;
+    }
+
+    @media(max-width:860px) {
       .layout { display:block }
-      aside { width:100%; padding:12px; border-right:0; border-bottom:1px solid var(--line) }
-      .brand { padding:0 7px 10px }
-      nav { display:flex; overflow:auto }
-      nav button { white-space:nowrap }
+      aside { width:100%; height:auto; position:static; padding:12px; border-right:0; border-bottom:1px solid var(--line) }
+      .brand { padding:0 6px 10px; margin-bottom:10px }
+      nav { display:flex; overflow:auto; gap:6px; padding-bottom:4px }
+      nav button { white-space:nowrap; flex-shrink:0 }
       .side-note { display:none }
       main { padding:20px 13px }
-      .cards { grid-template-columns:repeat(2,minmax(120px,1fr)); gap:9px }
+      .cards { grid-template-columns:repeat(2,minmax(130px,1fr)); gap:10px }
+      .charts-grid { grid-template-columns:1fr }
+      .rings-row { grid-template-columns:1fr }
       .card { padding:14px }
       .card strong { font-size:18px }
     }
@@ -106,19 +298,28 @@
 <body>
 <div class="layout">
   <aside>
-    <div class="brand">✦ Wedding Planner<small>Rencana hari istimewa</small></div>
+    <div class="brand">
+      <div class="brand-title">✿ Wedding Planner</div>
+      <small>Matcha &amp; Berry Edition</small>
+    </div>
     <nav id="nav"></nav>
-    <div class="side-note">Data disimpan di repository GitHub dan cache browser Anda.</div>
+    <div class="side-note">
+      Data tersimpan di repository GitHub dan disinkronkan langsung tanpa cache browser.
+    </div>
   </aside>
 
   <main>
     <header class="top">
       <div>
         <h1 id="pageTitle">Ringkasan</h1>
-        <div id="status" class="sub">Memuat data…</div>
+        <div id="statusPill" class="status-pill">
+          <span class="status-dot"></span>
+          <span id="status">Memuat data…</span>
+        </div>
       </div>
       <div class="actions">
-        <button type="button" class="btn" id="syncButton">↻ Sinkronkan</button>
+        <button type="button" class="btn" id="syncButton" title="Ambil data terbaru dari GitHub">↻ Sinkronkan</button>
+        <button type="button" class="btn" id="clearCacheButton" title="Hapus cache browser & muat ulang tampilan terbaru">🧹 Hapus Cache</button>
         <button type="button" class="btn" id="githubButton">⚙ GitHub</button>
       </div>
     </header>
@@ -137,10 +338,10 @@
       <div class="muted" style="font-size:12px">Gunakan fine-grained token dengan akses <strong>Contents: Read and write</strong> ke repository ini. Token hanya disimpan di browser perangkat ini.</div>
     </div>
     <div class="dialog-actions" style="justify-content:space-between;flex-wrap:wrap">
-      <button type="button" class="btn small" id="exportButton">⬇ Unduh Backup JSON</button>
+      <button type="button" class="btn small" id="exportButton">⬇ Backup JSON</button>
       <div style="display:flex;gap:8px">
         <button type="button" class="btn" id="cancelConfig">Batal</button>
-        <button type="submit" class="btn gold">Simpan & Muat</button>
+        <button type="submit" class="btn gold">Simpan &amp; Muat</button>
       </div>
     </div>
   </form>
@@ -161,12 +362,23 @@
 <script>
 "use strict";
 
+const APP_VERSION = "2026-11-16-v4-matchaberry";
+const VERSION_KEY = "wedding-planner-version";
 const CONFIG_KEY = "wedding-planner-config-v1";
 const CACHE_KEY = "wedding-planner-data-v1";
+
 const TABS = [
-  "Ringkasan", "Anggaran", "Pengeluaran", "Pembayaran Vendor",
-  "Checklist", "Vendor", "Tamu", "Seserahan"
+  { name:"Ringkasan", icon:"◈" },
+  { name:"Anggaran", icon:"◎" },
+  { name:"Pengeluaran", icon:"▤" },
+  { name:"Pembayaran Vendor", icon:"❖" },
+  { name:"Checklist", icon:"☑" },
+  { name:"Vendor", icon:"✦" },
+  { name:"Tamu", icon:"☺" },
+  { name:"Seserahan", icon:"🎁" }
 ];
+
+const PALETTE = ["#4f774c","#9e3b5c","#7fa67b","#c96887","#c99746","#77587c","#5d948d","#b37d89"];
 
 const CATEGORIES = [
   ["Gedung/Venue",25000000],["Katering",60000000],["Dekorasi",15000000],
@@ -207,6 +419,28 @@ const SESERAHAN_PRESET = [
   ["Kotak Hantaran & Jasa Hias Seserahan","Bersama","Jasa Hias",750000]
 ];
 
+if (location.search.includes("v=")) {
+  try {
+    history.replaceState(null, "", location.pathname + location.hash);
+  } catch {}
+}
+
+async function clearBrowserCaches(clearDataCache = true) {
+  if (clearDataCache) localStorage.removeItem(CACHE_KEY);
+  if ("caches" in window) {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    } catch {}
+  }
+  if ("serviceWorker" in navigator) {
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    } catch {}
+  }
+}
+
 function uid() {
   return (globalThis.crypto && crypto.randomUUID)
     ? crypto.randomUUID()
@@ -243,12 +477,16 @@ function money(v) {
   return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0})
     .format(Number(v)||0);
 }
+function shortMoney(v) {
+  const n = Number(v)||0;
+  if (n >= 1e9) return (n/1e9).toFixed(1).replace(/\.0$/,"") + " M";
+  if (n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,"") + " jt";
+  if (n >= 1e3) return (n/1e3).toFixed(0) + " rb";
+  return String(n);
+}
 function todayStr() {
   const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth()+1).padStart(2,"0");
-  const d = String(now.getDate()).padStart(2,"0");
-  return `${y}-${m}-${d}`;
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
 }
 function countdownText(dateStr) {
   if (!dateStr) return "Belum diatur";
@@ -257,10 +495,11 @@ function countdownText(dateStr) {
   const diff = Math.round((target - now) / 86400000);
   if (diff > 0) return `H-${diff}`;
   if (diff === 0) return "Hari H!";
-  return `H+${Math.abs(diff)} (Lewat)`;
+  return `H+${Math.abs(diff)}`;
 }
-function showStatus(text) {
+function showStatus(text, tone = "") {
   document.getElementById("status").textContent = text;
+  document.getElementById("statusPill").className = "status-pill" + (tone ? " " + tone : "");
 }
 let toastTimer = null;
 function toast(text) {
@@ -280,7 +519,6 @@ let activeTab = "Ringkasan";
 let editingId = null;
 let seserahanFilter = "Semua";
 
-// [fieldName, label, type, required, options/default]
 const fields = {
   budget: [
     ["name","Nama kategori","text",true],
@@ -338,9 +576,26 @@ const titles = {
   checklist:"Checklist", vendors:"Vendor", guests:"Tamu", seserahan:"Seserahan"
 };
 
+function navBadgeText(name) {
+  if (name === "Anggaran") return data.budget.length;
+  if (name === "Pengeluaran") return data.expenses.length;
+  if (name === "Pembayaran Vendor") return data.payments.length;
+  if (name === "Checklist") return `${data.checklist.filter(x=>x.done).length}/${data.checklist.length}`;
+  if (name === "Vendor") return data.vendors.length;
+  if (name === "Tamu") return data.guests.length;
+  if (name === "Seserahan") return `${data.seserahan.filter(x=>x.status!=="Belum dibeli").length}/${data.seserahan.length}`;
+  return "";
+}
+
 function render() {
   const nav=document.getElementById("nav");
-  nav.innerHTML=TABS.map(t=>`<button type="button" class="${t===activeTab?"active":""}" data-tab="${esc(t)}">${esc(t)}</button>`).join("");
+  nav.innerHTML=TABS.map(t=>{
+    const badge=navBadgeText(t.name);
+    return `<button type="button" class="${t.name===activeTab?"active":""}" data-tab="${esc(t.name)}">
+      <span class="nav-label"><span>${t.icon}</span><span>${esc(t.name)}</span></span>
+      ${badge!==""?`<span class="nav-count">${esc(badge)}</span>`:""}
+    </button>`;
+  }).join("");
   nav.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{activeTab=b.dataset.tab;render();}));
   document.getElementById("pageTitle").textContent=activeTab;
 
@@ -382,6 +637,81 @@ function budgetStats(cat) {
   return {est,spent,left,pct,status};
 }
 
+// ===== SVG CHARTS =====
+function buildDonutSvg(items, centerLabel, centerValue) {
+  const r = 58, cx = 82, cy = 82, C = 2 * Math.PI * r;
+  const total = items.reduce((s, x) => s + Math.max(0, Number(x.value)||0), 0);
+  let offset = 0;
+  const circles = total > 0
+    ? items.filter(x => x.value > 0).map(x => {
+        const dash = (x.value / total) * C;
+        const c = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${x.color}" stroke-width="20" stroke-dasharray="${dash.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}"><title>${esc(x.label)}: ${esc(x.display)}</title></circle>`;
+        offset += dash;
+        return c;
+      }).join("")
+    : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#e5e8dc" stroke-width="20" />`;
+
+  const legend = items.length
+    ? items.map(x => {
+        const pct = total > 0 ? Math.round((x.value / total) * 100) : 0;
+        return `<div class="legend-item">
+          <div class="legend-left"><span class="legend-dot" style="background:${x.color}"></span><span class="legend-name">${esc(x.label)}</span></div>
+          <span class="legend-val">${esc(x.display)} (${pct}%)</span>
+        </div>`;
+      }).join("")
+    : `<div class="muted" style="font-size:12px">Belum ada data untuk ditampilkan.</div>`;
+
+  return `<div class="donut-wrap">
+    <div class="donut-svg">
+      <svg viewBox="0 0 164 164" width="164" height="164">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#eceee4" stroke-width="20" />
+        <g transform="rotate(-90 ${cx} ${cy})">${circles}</g>
+      </svg>
+      <div class="donut-center"><small>${esc(centerLabel)}</small><b>${esc(centerValue)}</b></div>
+    </div>
+    <div class="legend">${legend}</div>
+  </div>`;
+}
+
+function buildMiniRing(pct, color, title, sub) {
+  const r = 20, C = 2 * Math.PI * r;
+  const clamped = Math.max(0, Math.min(100, pct));
+  const dash = (clamped / 100) * C;
+  return `<div class="ring-box">
+    <svg viewBox="0 0 52 52" width="52" height="52">
+      <circle cx="26" cy="26" r="${r}" fill="none" stroke="#e4e7dc" stroke-width="5.5" />
+      <circle cx="26" cy="26" r="${r}" fill="none" stroke="${color}" stroke-width="5.5" stroke-linecap="round"
+        stroke-dasharray="${dash.toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 26 26)" />
+      <text x="26" y="30" text-anchor="middle" fill="#242a24" font-size="11" font-weight="700">${clamped}%</text>
+    </svg>
+    <div><b>${esc(title)}</b><small>${esc(sub)}</small></div>
+  </div>`;
+}
+
+function buildBudgetCompareChart() {
+  if (!data.budget.length) return `<div class="empty">Belum ada kategori anggaran.</div>`;
+  const items = data.budget.map(b => {
+    const st = budgetStats(b);
+    return { name: b.name, est: st.est, spent: st.spent };
+  });
+  const maxVal = Math.max(1, ...items.flatMap(i => [i.est, i.spent]));
+  return `<div class="barchart">${items.map(i => {
+    const estW = Math.round((i.est / maxVal) * 100);
+    const spentW = Math.round((i.spent / maxVal) * 100);
+    const over = i.spent > i.est;
+    return `<div class="bar-row">
+      <div class="bar-meta">
+        <strong>${esc(i.name)}</strong>
+        <span>${shortMoney(i.spent)} / ${shortMoney(i.est)}</span>
+      </div>
+      <div class="bar-tracks">
+        <div class="bar-track" title="Anggaran: ${money(i.est)}"><div class="bar-fill est" style="width:${estW}%"></div></div>
+        <div class="bar-track" title="Pengeluaran: ${money(i.spent)}"><div class="bar-fill ${over?"over":"real"}" style="width:${spentW}%"></div></div>
+      </div>
+    </div>`;
+  }).join("")}</div>`;
+}
+
 function summaryView() {
   const total=data.budget.reduce((s,x)=>s+Number(x.amount||0),0);
   const spent=data.expenses.reduce((s,x)=>s+Number(x.amount||0),0);
@@ -394,11 +724,27 @@ function summaryView() {
   const done=data.checklist.filter(x=>x.done).length;
   const checkPct=data.checklist.length?Math.round(done/data.checklist.length*100):0;
 
-  const guestHad=data.guests.filter(g=>g.rsvp==="Hadir").reduce((s,g)=>s+Number(g.count||1),0);
-  const guestTotal=data.guests.reduce((s,g)=>s+Number(g.count||1),0);
+  const guestHadCount=data.guests.filter(g=>g.rsvp==="Hadir").length;
+  const guestHadPeople=data.guests.filter(g=>g.rsvp==="Hadir").reduce((s,g)=>s+Number(g.count||1),0);
+  const guestPendCount=data.guests.filter(g=>(g.rsvp||"Belum konfirmasi")==="Belum konfirmasi").length;
+  const guestNoCount=data.guests.filter(g=>g.rsvp==="Tidak hadir").length;
+  const guestTotalPeople=data.guests.reduce((s,g)=>s+Number(g.count||1),0);
 
   const sesDone=data.seserahan.filter(s=>s.status!=="Belum dibeli").length;
+  const sesPct=data.seserahan.length?Math.round(sesDone/data.seserahan.length*100):0;
   const sesSpent=data.seserahan.reduce((s,x)=>s+Number(x.actual||0),0);
+
+  const useSpent = spent > 0;
+  const donutBudgetItems = data.budget.map((b, idx) => {
+    const val = useSpent ? budgetStats(b).spent : Number(b.amount||0);
+    return { label: b.name, value: val, display: shortMoney(val), color: PALETTE[idx % PALETTE.length] };
+  }).filter(x => x.value > 0).slice(0, 8);
+
+  const rsvpItems = [
+    { label:"Hadir", value:guestHadCount, display:`${guestHadCount} und.`, color:"#4f774c" },
+    { label:"Menunggu", value:guestPendCount, display:`${guestPendCount} und.`, color:"#d19c42" },
+    { label:"Tidak hadir", value:guestNoCount, display:`${guestNoCount} und.`, color:"#9e3b5c" }
+  ];
 
   const rows=data.budget.map(x=>{
     const st=budgetStats(x);
@@ -416,7 +762,7 @@ function summaryView() {
     <section class="panel date-box">
       <div>
         <h2 style="margin-bottom:2px">Tanggal Pernikahan</h2>
-        <span class="muted">Hitung mundur otomatis ke hari bahagia</span>
+        <span class="muted">Atur tanggal acara untuk menghitung mundur persiapan</span>
       </div>
       <div class="actions">
         <input type="date" id="weddingDateInput" value="${esc(data.weddingDate||"")}">
@@ -424,400 +770,29 @@ function summaryView() {
     </section>
 
     <section class="cards">
-      <div class="card"><label>Hitung Mundur</label><strong>${esc(countdownText(data.weddingDate))}</strong><small>${data.weddingDate?esc(data.weddingDate):"Pilih tanggal di atas"}</small></div>
-      <div class="card"><label>Total Anggaran</label><strong>${money(total)}</strong><small>Sisa: ${money(rem)}</small></div>
-      <div class="card"><label>Total Pengeluaran</label><strong>${money(spent)}</strong><div class="progress"><i class="${spent>total?"over":""}" style="width:${Math.min(spentPct,100)}%"></i></div></div>
-      <div class="card"><label>Pembayaran Vendor</label><strong>${money(paid)}</strong><small>Dari kontrak ${money(contractTotal)}</small></div>
-      <div class="card"><label>Tamu Hadir</label><strong>${guestHad} orang</strong><small>${data.guests.length} undangan (${guestTotal} org)</small></div>
-      <div class="card"><label>Checklist & Seserahan</label><strong>${done}/${data.checklist.length} tugas</strong><small>Seserahan: ${sesDone}/${data.seserahan.length} (${money(sesSpent)})</small><div class="progress"><i style="width:${checkPct}%"></i></div></div>
+      <div class="card highlight"><label>Hitung Mundur</label><strong>${esc(countdownText(data.weddingDate))}</strong><small>${data.weddingDate?esc(data.weddingDate):"Belum diatur"}</small></div>
+      <div class="card green"><label>Total Anggaran</label><strong>${money(total)}</strong><small>Sisa: ${money(rem)}</small></div>
+      <div class="card purple"><label>Total Pengeluaran</label><strong>${money(spent)}</strong><div class="progress"><i class="${spent>total?"over":""}" style="width:${Math.min(spentPct,100)}%"></i></div></div>
+      <div class="card blue"><label>Pembayaran Vendor</label><strong>${money(paid)}</strong><small>Kontrak: ${money(contractTotal)}</small></div>
+      <div class="card"><label>Tamu Hadir</label><strong>${guestHadPeople} orang</strong><small>${data.guests.length} undangan (${guestTotalPeople} org)</small></div>
+      <div class="card"><label>Seserahan</label><strong>${sesDone}/${data.seserahan.length} siap</strong><small>Terpakai: ${money(sesSpent)}</small></div>
     </section>
 
-    <section class="panel">
-      <div class="panel-head"><h2>Anggaran per Kategori</h2></div>
-      ${makeTable(["Kategori","Anggaran","Pengeluaran","Sisa","Terpakai","Status"],rows)}
-    </section>`;
-}
-
-function budgetView() {
-  let sumEst=0, sumSpent=0;
-  const rows=data.budget.map(x=>{
-    const st=budgetStats(x);
-    sumEst+=st.est; sumSpent+=st.spent;
-    return `<tr>
-      <td><strong>${esc(x.name)}</strong></td>
-      <td class="num">${money(st.est)}</td>
-      <td class="num">${money(st.spent)}</td>
-      <td class="num">${money(st.left)}</td>
-      <td><div class="prog-inline"><div class="progress"><i class="${st.spent>st.est?"over":""}" style="width:${Math.min(st.pct,100)}%"></i></div><small>${st.pct}%</small></div></td>
-      <td><span class="badge ${st.status[1]}">${st.status[0]}</span></td>
-      <td class="row-actions"><button data-edit="budget" data-id="${esc(x.id)}">Ubah</button><button data-delete="budget" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-  const footer = data.budget.length
-    ? `<tr><td>Total</td><td class="num">${money(sumEst)}</td><td class="num">${money(sumSpent)}</td><td class="num">${money(sumEst-sumSpent)}</td><td colspan="3"></td></tr>`
-    : "";
-  return `<section class="panel"><div class="panel-head"><h2>Anggaran</h2><button class="btn gold" data-add="budget">＋ Tambah kategori</button></div>${makeTable(["Kategori","Anggaran","Realisasi","Sisa","Terpakai","Status","Aksi"],rows,footer)}</section>`;
-}
-
-function expenseView() {
-  const total=data.expenses.reduce((s,x)=>s+Number(x.amount||0),0);
-  const rows=data.expenses.map(x=>{
-    const st=x.status||"Lunas";
-    const cls=st==="Lunas"?"lunas":st==="DP"?"dp":"tidak";
-    return `<tr>
-      <td>${esc(x.date||"-")}</td>
-      <td>${esc(x.name)}</td>
-      <td>${esc(x.category)}</td>
-      <td>${esc(x.vendor||"-")}</td>
-      <td class="num">${money(x.amount)}</td>
-      <td><span class="badge ${cls}">${esc(st)}</span></td>
-      <td class="row-actions"><button data-edit="expenses" data-id="${esc(x.id)}">Ubah</button><button data-delete="expenses" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-  return `<section class="panel"><div class="panel-head"><div><h2>Pengeluaran</h2><span class="muted">Total tercatat: ${money(total)}</span></div><button class="btn gold" data-add="expenses">＋ Tambah pengeluaran</button></div>${makeTable(["Tanggal","Deskripsi","Kategori","Vendor","Jumlah","Status","Aksi"],rows)}</section>`;
-}
-
-function paymentView() {
-  const rows=data.payments.map(x=>{
-    const total=Number(x.total||0), paid=Number(x.paid||0), left=total-paid;
-    const isPaid = total > 0 && paid >= total;
-    const status = isPaid ? ["Lunas","lunas"] : paid > 0 ? ["DP / Cicilan","dp"] : ["Belum bayar","tidak"];
-    return `<tr>
-      <td><strong>${esc(x.vendor)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
-      <td class="num">${money(total)}</td>
-      <td class="num">${money(paid)}</td>
-      <td class="num">${money(Math.max(0,left))}</td>
-      <td>${esc(x.due||"-")}</td>
-      <td><span class="badge ${status[1]}">${status[0]}</span></td>
-      <td class="row-actions"><button data-edit="payments" data-id="${esc(x.id)}">Ubah</button><button data-delete="payments" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-  return `<section class="panel"><div class="panel-head"><h2>Pembayaran Vendor</h2><button class="btn gold" data-add="payments">＋ Tambah pembayaran</button></div>${makeTable(["Vendor","Total Kontrak","Sudah Dibayar","Sisa","Jatuh Tempo","Status","Aksi"],rows)}</section>`;
-}
-
-function checklistView() {
-  const today = todayStr();
-  const rows=data.checklist.map(x=>{
-    const overdue = Boolean(x.due && x.due < today && !x.done);
-    const rowCls = x.done ? "done-row" : overdue ? "overdue" : "";
-    const badge = x.done ? ["Selesai","done"] : overdue ? ["Terlambat","terlambat"] : ["Belum","pending"];
-    return `<tr class="${rowCls}">
-      <td><label class="taskline"><input type="checkbox" data-task="${esc(x.id)}" ${x.done?"checked":""}><span class="task-text">${esc(x.task)}</span></label></td>
-      <td>${esc(x.category||"-")}</td>
-      <td>${esc(x.due||"-")}</td>
-      <td>${esc(x.owner||"-")}</td>
-      <td><span class="badge ${badge[1]}">${badge[0]}</span></td>
-      <td class="row-actions"><button data-edit="checklist" data-id="${esc(x.id)}">Ubah</button><button data-delete="checklist" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-  return `<section class="panel"><div class="panel-head"><div><h2>Checklist</h2><span class="muted">Tugas lewat tenggat ditandai garis merah.</span></div><button class="btn gold" data-add="checklist">＋ Tambah tugas</button></div>${makeTable(["Tugas","Kategori","Tenggat","PJ","Status","Aksi"],rows)}</section>`;
-}
-
-function vendorView() {
-  const rows=data.vendors.map(x=>{
-    const bk=x.booked||"Belum";
-    const cls=bk==="Sudah"?"sudah":bk==="DP / Proses"?"proses":"pending";
-    return `<tr>
-      <td><strong>${esc(x.name)}</strong></td>
-      <td>${esc(x.category)}</td>
-      <td>${esc(x.contact||"-")}</td>
-      <td class="num">${money(x.price)}</td>
-      <td><span class="badge ${cls}">${esc(bk)}</span></td>
-      <td>${esc(x.note||"-")}</td>
-      <td class="row-actions"><button data-edit="vendors" data-id="${esc(x.id)}">Ubah</button><button data-delete="vendors" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-  return `<section class="panel"><div class="panel-head"><h2>Vendor</h2><button class="btn gold" data-add="vendors">＋ Tambah vendor</button></div>${makeTable(["Nama Vendor","Kategori","Kontak","Harga","Booking","Catatan","Aksi"],rows)}</section>`;
-}
-
-function guestView() {
-  const hadir=data.guests.filter(g=>g.rsvp==="Hadir").reduce((s,g)=>s+Number(g.count||1),0);
-  const pending=data.guests.filter(g=>(g.rsvp||"Belum konfirmasi")==="Belum konfirmasi").length;
-  const rows=data.guests.map(x=>`<tr>
-    <td><strong>${esc(x.name)}</strong></td>
-    <td>${esc(x.side||"-")}</td>
-    <td>${esc(x.contact||"-")}</td>
-    <td class="num">${esc(x.count||1)}</td>
-    <td><span class="badge ${x.rsvp==="Hadir"?"hadir":x.rsvp==="Tidak hadir"?"tidak":"pending"}">${esc(x.rsvp||"Belum konfirmasi")}</span></td>
-    <td>${esc(x.note||"-")}</td>
-    <td class="row-actions"><button data-edit="guests" data-id="${esc(x.id)}">Ubah</button><button data-delete="guests" data-id="${esc(x.id)}">Hapus</button></td>
-  </tr>`).join("");
-  return `<section class="panel"><div class="panel-head"><div><h2>Tamu</h2><span class="muted">Total hadir: ${hadir} orang · Menunggu RSVP: ${pending} undangan</span></div><button class="btn gold" data-add="guests">＋ Tambah tamu</button></div>${makeTable(["Nama","Kategori","Kontak","Jumlah","RSVP","Catatan","Aksi"],rows)}</section>`;
-}
-
-function seserahanView() {
-  const list = seserahanFilter === "Semua"
-    ? data.seserahan
-    : data.seserahan.filter(x => x.side === seserahanFilter);
-
-  const totalItems = data.seserahan.length;
-  const boughtOrDone = data.seserahan.filter(x => x.status === "Sudah dibeli" || x.status === "Sudah dihias").length;
-  const decorated = data.seserahan.filter(x => x.status === "Sudah dihias").length;
-  const totalEst = data.seserahan.reduce((s,x)=>s+Number(x.estimated||0),0);
-  const totalActual = data.seserahan.reduce((s,x)=>s+Number(x.actual||0),0);
-  const pct = totalItems ? Math.round(boughtOrDone / totalItems * 100) : 0;
-
-  const rows = list.map(x => {
-    const st = x.status || "Belum dibeli";
-    const cls = st === "Sudah dihias" ? "dihias" : st === "Sudah dibeli" ? "dibeli" : "pending";
-    return `<tr>
-      <td><strong>${esc(x.name)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
-      <td>${esc(x.side||"Untuk Wanita")}</td>
-      <td>${esc(x.category||"-")}</td>
-      <td class="num">${money(x.estimated)}</td>
-      <td class="num">${money(x.actual)}</td>
-      <td><button type="button" class="badge clickable ${cls}" data-cycle-seserahan="${esc(x.id)}" title="Klik untuk ubah status">${esc(st)}</button></td>
-      <td class="row-actions"><button data-edit="seserahan" data-id="${esc(x.id)}">Ubah</button><button data-delete="seserahan" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-
-  const filters = ["Semua","Untuk Wanita","Untuk Pria","Bersama"].map(f =>
-    `<button type="button" class="btn small filter ${seserahanFilter===f?"active":""}" data-seserahan-filter="${esc(f)}">${esc(f)}</button>`
-  ).join("");
-
-  return `
-    <section class="cards">
-      <div class="card"><label>Total Item Seserahan</label><strong>${totalItems} item</strong><small>${decorated} sudah dihias</small></div>
-      <div class="card"><label>Sudah Dibeli / Siap</label><strong>${boughtOrDone}/${totalItems}</strong><div class="progress"><i style="width:${pct}%"></i></div></div>
-      <div class="card"><label>Estimasi Biaya</label><strong>${money(totalEst)}</strong><small>Rencana anggaran seserahan</small></div>
-      <div class="card"><label>Realisasi Biaya</label><strong>${money(totalActual)}</strong><small>Selisih: ${money(totalEst - totalActual)}</small></div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <h2>Daftar Seserahan</h2>
-          <span class="muted">Klik status untuk mengganti (Belum dibeli → Sudah dibeli → Sudah dihias).</span>
+    <section class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-head">
+          <h2>Anggaran vs Pengeluaran</h2>
+          <span>Matcha Muda = Anggaran · Matcha Tua = Aman · Berry = Melebihi</span>
         </div>
-        <div class="toolbar">
-          ${filters}
-          <button class="btn gold" data-add="seserahan">＋ Tambah seserahan</button>
-        </div>
+        ${buildBudgetCompareChart()}
       </div>
-      ${makeTable(["Barang","Pihak","Kategori","Estimasi","Realisasi","Status","Aksi"], rows)}
-    </section>`;
-}
 
-function detectGitHubRepo() {
-  if (!location.hostname.endsWith(".github.io")) return {};
-  const owner = location.hostname.replace(/\.github\.io$/i, "");
-  const parts = location.pathname.split("/").filter(Boolean);
-  return { owner, repo: parts[0] || "" };
-}
+      <div class="chart-card">
+        <div class="chart-head">
+          <h2>${useSpent ? "Distribusi Pengeluaran" : "Distribusi Anggaran"}</h2>
+          <span>${useSpent ? "Berdasarkan realisasi tercatat" : "Berdasarkan alokasi kategori"}</span>
+        </div>
+        ${buildDonutSvg(donutBudgetItems, useSpent ? "Total Keluar" : "Total Budget", shortMoney(useSpent ? spent : total))}
+      </div>
 
-function openConfig() {
-  const form=document.getElementById("configForm");
-  const guessed=detectGitHubRepo();
-  form.elements.owner.value=config.owner||guessed.owner||"";
-  form.elements.repo.value=config.repo||guessed.repo||"";
-  form.elements.path.value=config.path||"pernikahan.json";
-  form.elements.token.value=config.token||"";
-  document.getElementById("configDialog").showModal();
-}
-document.getElementById("githubButton").addEventListener("click",openConfig);
-document.getElementById("cancelConfig").addEventListener("click",()=>document.getElementById("configDialog").close());
-document.getElementById("syncButton").addEventListener("click",loadData);
-document.getElementById("exportButton").addEventListener("click",()=>{
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url; a.download="pernikahan-backup.json"; a.click();
-  URL.revokeObjectURL(url);
-  toast("Backup JSON diunduh");
-});
-
-document.getElementById("configForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const f=e.currentTarget;
-  config={
-    owner:f.elements.owner.value.trim(),
-    repo:f.elements.repo.value.trim(),
-    path:f.elements.path.value.trim()||"pernikahan.json",
-    token:f.elements.token.value.trim()
-  };
-  localStorage.setItem(CONFIG_KEY,JSON.stringify(config));
-  document.getElementById("configDialog").close();
-  await loadData();
-});
-
-function bytesToBase64(bytes) {
-  let binary="";
-  for(let i=0;i<bytes.length;i+=0x8000) binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
-  return btoa(binary);
-}
-function base64ToText(content) {
-  const binary=atob(content.replace(/\s/g,""));
-  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
-function githubUrl() {
-  const path=(config.path||"pernikahan.json").split("/").filter(Boolean).map(encodeURIComponent).join("/");
-  return `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${path}`;
-}
-async function apiRequest(method,body,signal) {
-  const response=await fetch(githubUrl(),{
-    method,signal,cache:"no-store",
-    headers:{
-      "Accept":"application/vnd.github+json",
-      "Authorization":`Bearer ${config.token}`,
-      "X-GitHub-Api-Version":"2022-11-28",
-      "Content-Type":"application/json"
-    },
-    body:body?JSON.stringify(body):undefined
-  });
-  const result=await response.json().catch(()=>({}));
-  if(!response.ok) {
-    const err = new Error(result.message||`GitHub API error ${response.status}`);
-    err.status = response.status;
-    throw err;
-  }
-  return result;
-}
-async function loadData() {
-  config=readConfig();
-  try {
-    const cached=localStorage.getItem(CACHE_KEY);
-    if(cached) data=normalizeData(JSON.parse(cached));
-  } catch { localStorage.removeItem(CACHE_KEY); }
-  render();
-
-  if(!config.owner||!config.repo||!config.token) {
-    showStatus("Mode lokal — klik GitHub untuk mengatur sinkronisasi");
-    return;
-  }
-
-  showStatus("Mengambil data dari GitHub…");
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),15000);
-  try {
-    let result;
-    try {
-      result=await apiRequest("GET",null,controller.signal);
-    } catch(err) {
-      if(err.status!==404) throw err;
-      data=newData();
-      await saveToGitHub();
-      return;
-    }
-    data=normalizeData(JSON.parse(base64ToText(result.content)));
-    localStorage.setItem(CACHE_KEY,JSON.stringify(data));
-    render();
-    const jam=new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
-    showStatus(`Tersinkron dengan GitHub (${jam})`);
-  } catch(err) {
-    console.error("GitHub sync error:",err);
-    showStatus(err.name==="AbortError"?"Koneksi timeout — periksa internet":`Gagal sinkron: ${err.message}`);
-  } finally {
-    clearTimeout(timer);
-  }
-}
-async function saveToGitHub() {
-  localStorage.setItem(CACHE_KEY,JSON.stringify(data));
-  if(!config.owner||!config.repo||!config.token) {
-    showStatus("Tersimpan di browser saja — atur GitHub untuk sinkronisasi");
-    return;
-  }
-  showStatus("Menyimpan ke GitHub…");
-  try {
-    let sha;
-    try { sha=(await apiRequest("GET")).sha; }
-    catch(err) { if(err.status!==404) throw err; }
-    const content=bytesToBase64(new TextEncoder().encode(JSON.stringify(data,null,2)));
-    const body={message:"Update wedding planner data",content};
-    if(sha) body.sha=sha;
-    await apiRequest("PUT",body);
-    const jam=new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
-    showStatus(`Tersimpan & tersinkron (${jam})`);
-  } catch(err) {
-    console.error("GitHub save error:",err);
-    const msg = err.status === 409
-      ? "Konflik versi di GitHub — klik Sinkronkan lalu coba lagi"
-      : `Tersimpan di browser; gagal ke GitHub: ${err.message}`;
-    showStatus(msg);
-    throw err;
-  }
-}
-async function changeData(fn) {
-  fn();
-  render();
-  localStorage.setItem(CACHE_KEY,JSON.stringify(data));
-  try { await saveToGitHub(); toast("Data tersimpan"); }
-  catch { toast("Tersimpan lokal; sinkronisasi GitHub gagal"); }
-}
-
-function editItem(key,id) {
-  openItem(key,data[key].find(x=>x.id===id));
-}
-function openItem(key,item=null) {
-  editingId=item?item.id:null;
-  const dialog=document.getElementById("itemDialog");
-  document.getElementById("itemTitle").textContent=(item?"Ubah ":"Tambah ")+titles[key];
-  const host=document.getElementById("itemFields");
-  host.innerHTML=fields[key].map(([name,label,type,req,extra])=>{
-    const defVal = type==="number" && extra!==undefined ? extra : "";
-    const value=item?.[name]??defVal;
-    const reqAttr = req ? "required" : "";
-    if(type==="category") {
-      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${data.budget.map(b=>`<option value="${esc(b.name)}" ${value===b.name?"selected":""}>${esc(b.name)}</option>`).join("")}</select></div>`;
-    }
-    if(type==="select") {
-      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${(extra||[]).map(v=>`<option value="${esc(v)}" ${value===v?"selected":""}>${esc(v)}</option>`).join("")}</select></div>`;
-    }
-    if(type==="textarea") {
-      return `<div class="field"><label>${label}</label><textarea name="${name}" ${reqAttr}>${esc(value)}</textarea></div>`;
-    }
-    return `<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${esc(value)}" ${type==="number"?'min="0" step="1"':''} ${reqAttr}></div>`;
-  }).join("");
-  dialog.dataset.key=key;
-  dialog.showModal();
-}
-
-document.getElementById("cancelItem").addEventListener("click",()=>document.getElementById("itemDialog").close());
-document.getElementById("itemForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const dialog=document.getElementById("itemDialog");
-  const key=dialog.dataset.key, form=e.currentTarget, item={};
-  for(const [name,,type] of fields[key]) {
-    const el=form.elements[name];
-    item[name]=type==="number"?Number(el.value||0):el.value.trim();
-  }
-  dialog.close();
-  await changeData(()=>{
-    if(editingId) {
-      if(key==="budget") {
-        const old=data.budget.find(x=>x.id===editingId);
-        if(old && old.name!==item.name) {
-          data.expenses=data.expenses.map(ex=>ex.category===old.name?{...ex,category:item.name}:ex);
-        }
-      }
-      data[key]=data[key].map(x=>x.id===editingId?{...x,...item}:x);
-    } else {
-      data[key].push({id:uid(),...item,...(key==="checklist"?{done:false}:{})});
-    }
-    editingId=null;
-  });
-});
-
-async function removeItem(key,id) {
-  if(!confirm("Hapus data ini?")) return;
-  await changeData(()=>{data[key]=data[key].filter(x=>x.id!==id);});
-}
-async function toggleTask(id,done) {
-  await changeData(()=>{data.checklist=data.checklist.map(x=>x.id===id?{...x,done}:x);});
-}
-async function cycleSeserahan(id) {
-  const order=["Belum dibeli","Sudah dibeli","Sudah dihias"];
-  await changeData(()=>{
-    data.seserahan=data.seserahan.map(x=>{
-      if(x.id!==id) return x;
-      const next=order[(order.indexOf(x.status||"Belum dibeli")+1)%order.length];
-      return {...x,status:next};
-    });
-  });
-}
-
-render();
-loadData();
-</script>
-</body>
-</html>
+      <div cl
