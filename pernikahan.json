@@ -1,0 +1,164 @@
+{
+  "budget": [
+    {
+      "id": "89f0be6b-8ea7-4969-95ee-5a580ce909d2",
+      "name": "Gedung/Venue",
+      "amount": 25000000
+    },
+    {
+      "id": "397038d1-633a-49f9-a4c3-08077eb86b06",
+      "name": "Katering",
+      "amount": 60000000
+    },
+    {
+      "id": "4fd3b258-f0d0-459a-916f-cd0cf2c197cc",
+      "name": "Dekorasi",
+      "amount": 15000000
+    },
+    {
+      "id": "28eb3bea-98cd-4c0e-9587-314015936b58",
+      "name": "Fotografi & Videografi",
+      "amount": 12000000
+    },
+    {
+      "id": "74130fcc-060a-4fc7-8c7c-c182661acb9f",
+      "name": "Rias & Busana",
+      "amount": 8000000
+    },
+    {
+      "id": "98304909-745c-4db7-91a0-a0792d421bde",
+      "name": "Undangan & Cetak",
+      "amount": 2000000
+    },
+    {
+      "id": "4ac1ea68-3ac5-40f5-809b-74d92cea7f2b",
+      "name": "Musik/Hiburan",
+      "amount": 5000000
+    },
+    {
+      "id": "7867b505-06c8-4306-87c9-b7c580cda160",
+      "name": "Lain-lain",
+      "amount": 5000000
+    }
+  ],
+  "expenses": [],
+  "payments": [],
+  "checklist": [
+    {
+      "id": "70332d5f-9f69-4433-8835-49640c1f0705",
+      "task": "Tentukan tanggal pernikahan",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "4199c316-35a0-408a-9c4e-b953e26c0287",
+      "task": "Tentukan total anggaran",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "09016a55-c489-4e2e-9650-48ecaa8304fb",
+      "task": "Buat daftar tamu awal",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "8cb22ff2-c4a2-490d-b471-cd415d4cae81",
+      "task": "Booking gedung/venue",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "1f5ea973-67d8-4f3e-b6fe-2cc186630a91",
+      "task": "Booking katering dan cek menu tasting",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "2ccf9aa7-89b7-4a45-97a8-69a66390b839",
+      "task": "Booking fotografer dan videografer",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "83609c34-25e0-444a-ae81-19caf2bb52ba",
+      "task": "Booking dekorasi",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "ec29716d-c3a1-432f-90f6-800a6057d60f",
+      "task": "Booking MC, musik, atau hiburan",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "ee997780-ed21-4725-80c4-b3b0a78723ff",
+      "task": "Booking rias pengantin dan busana",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "8c3fe433-d2ed-41cb-8313-6e731a1a1fa2",
+      "task": "Pesan undangan dan cetak",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "93e6a130-3cba-4aaf-86f1-ff967fc53061",
+      "task": "Kirim undangan ke tamu",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "3ae6010f-4c9f-49ce-a0c0-ba3773910266",
+      "task": "Pantau RSVP tamu",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "32869ba1-2b35-4a41-81de-18de50c93898",
+      "task": "Ajukan izin dan urus surat-surat administrasi",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "0a6a73c7-5ece-4ec8-9be9-4b3e584d0548",
+      "task": "Fitting busana dan jas",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "5bd2d013-b770-47ab-a885-adcd22940d44",
+      "task": "Siapkan denah meja dan kartu nama",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "59356386-df06-4e94-9484-34f4f1688fc0",
+      "task": "Konfirmasi ulang semua vendor (H-30)",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "b7b5bc40-2722-46cf-b2cd-bff3b4fc1828",
+      "task": "Kirim rundown ke semua vendor (H-7)",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "8db8a22a-50b6-42d0-bb87-c95cc1e73b5a",
+      "task": "Gladi bersih (H-1)",
+      "done": false,
+      "due": ""
+    },
+    {
+      "id": "4bfbd7c6-0122-4a48-9581-7f40e9e23479",
+      "task": "Siapkan perlengkapan darurat",
+      "done": false,
+      "due": ""
+    }
+  ],
+  "vendors": [],
+  "guests": []
+}
