@@ -49,14 +49,27 @@
       padding:24px 14px;
       display:flex; flex-direction:column;
       position:sticky; top:0; height:100vh; overflow-y:auto;
+      transition:width .2s ease, padding .2s ease;
     }
-    .brand { padding:0 12px 20px; border-bottom:1px solid #d5ddd0; margin-bottom:16px }
+    .brand {
+      padding:0 8px 18px; border-bottom:1px solid #d5ddd0; margin-bottom:14px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:8px;
+    }
+    .brand-text { min-width:0 }
     .brand-title {
       color:var(--berry);
       font-family:Georgia,"Times New Roman",serif;
       font-size:20px; font-weight:700; letter-spacing:.2px;
+      white-space:nowrap;
     }
     .brand small { display:block; color:var(--matcha-deep); font-size:11px; margin-top:3px }
+    .side-toggle {
+      flex-shrink:0; width:30px; height:30px; border-radius:8px;
+      border:1px solid #d2dbcd; background:#fff; color:var(--matcha-deep);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:18px; line-height:1; transition:all .15s;
+    }
+    .side-toggle:hover { border-color:var(--berry); color:var(--berry); background:var(--berry-soft) }
     nav { display:grid; gap:4px }
     nav button {
       border:1px solid transparent; border-radius:10px;
@@ -73,16 +86,28 @@
       font-weight:600;
     }
     .nav-label { display:flex; align-items:center; gap:9px; min-width:0 }
+    .nav-icon { flex-shrink:0 }
+    .nav-text { white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
     .nav-count {
       font-size:11px; color:var(--matcha-deep);
       background:#dde6d8; border-radius:999px; padding:2px 8px;
-      font-variant-numeric:tabular-nums;
+      font-variant-numeric:tabular-nums; flex-shrink:0;
     }
     nav button.active .nav-count { background:rgba(255,255,255,.24); color:#fff }
     .side-note {
       margin-top:auto; padding:16px 12px 0; border-top:1px solid #d5ddd0;
       color:var(--muted); font-size:11px; line-height:1.5;
     }
+
+    /* SIDEBAR COLLAPSED */
+    aside.collapsed { width:72px; padding:20px 10px }
+    aside.collapsed .brand { justify-content:center; padding:0 0 16px }
+    aside.collapsed .brand-text,
+    aside.collapsed .nav-text,
+    aside.collapsed .nav-count,
+    aside.collapsed .side-note { display:none }
+    aside.collapsed nav button { justify-content:center; padding:11px 0 }
+    aside.collapsed .nav-icon { font-size:17px }
 
     /* MAIN */
     main { width:100%; max-width:1520px; margin:auto; padding:28px clamp(16px,3.5vw,48px); min-width:0 }
@@ -327,10 +352,14 @@
 
     @media(max-width:860px) {
       .layout { display:block }
-      aside { width:100%; height:auto; position:static; padding:12px; border-right:0; border-bottom:1px solid var(--line) }
-      .brand { padding:0 6px 10px; margin-bottom:10px }
+      aside, aside.collapsed { width:100%; height:auto; position:static; padding:12px; border-right:0; border-bottom:1px solid var(--line) }
+      .brand, aside.collapsed .brand { justify-content:space-between; padding:0 6px 10px; margin-bottom:10px }
+      aside.collapsed .brand-text { display:block }
+      aside.collapsed .nav-text, aside.collapsed .nav-count { display:inline }
+      .side-toggle { display:none }
       nav { display:flex; overflow:auto; gap:6px; padding-bottom:4px }
-      nav button { white-space:nowrap; flex-shrink:0 }
+      nav button, aside.collapsed nav button { justify-content:space-between; padding:10px 12px; white-space:nowrap; flex-shrink:0 }
+      aside.collapsed .nav-icon { font-size:inherit }
       .side-note { display:none }
       main { padding:20px 13px }
       .cards { grid-template-columns:repeat(2,minmax(130px,1fr)); gap:10px }
@@ -343,10 +372,13 @@
 </head>
 <body>
 <div class="layout">
-  <aside>
+  <aside id="sidebar">
     <div class="brand">
-      <div class="brand-title">✿ Wedding Planner</div>
-      <small>Matcha &amp; Berry Edition</small>
+      <div class="brand-text">
+        <div class="brand-title">✿ Wedding Planner</div>
+        <small>Matcha &amp; Berry Edition</small>
+      </div>
+      <button type="button" class="side-toggle" id="sidebarToggle" title="Ciutkan sidebar" aria-label="Ciutkan sidebar">‹</button>
     </div>
     <nav id="nav"></nav>
     <div class="side-note">
@@ -408,10 +440,11 @@
 <script>
 "use strict";
 
-const APP_VERSION = "2026-11-16-v6-inline-edit";
+const APP_VERSION = "2026-11-16-v7-sidebar-toggle";
 const VERSION_KEY = "wedding-planner-version";
 const CONFIG_KEY = "wedding-planner-config-v1";
 const CACHE_KEY = "wedding-planner-data-v1";
+const SIDEBAR_KEY = "wedding-planner-sidebar-collapsed";
 
 const TABS = [
   { name:"Ringkasan", icon:"◈" },
@@ -488,6 +521,23 @@ const ADMINISTRASI_PRESET = [
 if (location.search.includes("v=")) {
   try { history.replaceState(null, "", location.pathname + location.hash); } catch {}
 }
+
+// ===== SIDEBAR COLLAPSE / EXPAND =====
+function applySidebarState(collapsed) {
+  const aside = document.getElementById("sidebar");
+  const btn = document.getElementById("sidebarToggle");
+  aside.classList.toggle("collapsed", collapsed);
+  btn.textContent = collapsed ? "›" : "‹";
+  btn.title = collapsed ? "Perluas sidebar" : "Ciutkan sidebar";
+  btn.setAttribute("aria-label", btn.title);
+  btn.setAttribute("aria-expanded", String(!collapsed));
+}
+applySidebarState(localStorage.getItem(SIDEBAR_KEY) === "1");
+document.getElementById("sidebarToggle").addEventListener("click", () => {
+  const next = !document.getElementById("sidebar").classList.contains("collapsed");
+  localStorage.setItem(SIDEBAR_KEY, next ? "1" : "0");
+  applySidebarState(next);
+});
 
 async function clearBrowserCaches(clearDataCache = true) {
   if (clearDataCache) localStorage.removeItem(CACHE_KEY);
@@ -710,8 +760,9 @@ function render() {
   const nav=document.getElementById("nav");
   nav.innerHTML=TABS.map(t=>{
     const badge=navBadgeText(t.name);
-    return `<button type="button" class="${t.name===activeTab?"active":""}" data-tab="${esc(t.name)}">
-      <span class="nav-label"><span>${t.icon}</span><span>${esc(t.name)}</span></span>
+    const tip=badge!==""?`${t.name} (${badge})`:t.name;
+    return `<button type="button" class="${t.name===activeTab?"active":""}" data-tab="${esc(t.name)}" title="${esc(tip)}">
+      <span class="nav-label"><span class="nav-icon">${t.icon}</span><span class="nav-text">${esc(t.name)}</span></span>
       ${badge!==""?`<span class="nav-count">${esc(badge)}</span>`:""}
     </button>`;
   }).join("");
@@ -741,7 +792,6 @@ function render() {
   }));
   app.querySelectorAll("[data-cycle-adm]").forEach(b=>b.addEventListener("click",()=>cycleAdministrasi(b.dataset.cycleAdm)));
 
-  // Event untuk seluruh sel edit inline
   app.querySelectorAll("[data-inline-id]").forEach(el => {
     if (el.dataset.money) {
       el.addEventListener("focus", () => {
