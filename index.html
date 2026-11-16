@@ -237,39 +237,68 @@
     .ring-box b { display:block; font-size:14px; color:var(--text) }
     .ring-box small { display:block; color:var(--muted); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 
-    /* TABLE */
+    /* TABLE & INLINE EDITING */
     .table-wrap { overflow:auto }
-    table { width:100%; min-width:640px; border-collapse:collapse }
-    th,td { padding:12px; text-align:left; border-bottom:1px solid var(--line); vertical-align:middle }
+    table { width:100%; min-width:680px; border-collapse:collapse }
+    th,td { padding:7px 9px; text-align:left; border-bottom:1px solid var(--line); vertical-align:middle }
     th {
+      padding:11px 10px;
       color:var(--muted); font-size:11px; font-weight:700; white-space:nowrap;
       text-transform:uppercase; letter-spacing:.05em; background:#f7f9f4;
     }
     tbody tr:hover { background:#fafbf8 }
     tr:last-child td { border-bottom:0 }
-    tfoot td { font-weight:700; border-top:1px solid var(--line); background:#f3f6ee }
+    tfoot td { padding:11px 10px; font-weight:700; border-top:1px solid var(--line); background:#f3f6ee }
     tr.overdue td:first-child { box-shadow:inset 3px 0 0 var(--berry) }
     tr.done-row td { color:var(--muted) }
-    tr.done-row .task-text { text-decoration:line-through }
+    tr.done-row .cell-input[data-inline-field="task"] { text-decoration:line-through; color:var(--muted) }
     .empty { padding:24px; text-align:center; color:var(--muted) }
+
+    .cell-input {
+      width:100%; min-width:95px;
+      border:1px solid transparent; background:transparent;
+      padding:6px 8px; border-radius:7px; color:var(--text);
+      transition:border-color .15s, background .15s;
+    }
+    .cell-input:hover { border-color:var(--line); background:#fafbf8 }
+    .cell-input:focus { outline:none; border-color:var(--berry); background:#fff }
+    .cell-input.bold { font-weight:600 }
+    .cell-input.date-sm { min-width:130px }
+    .cell-input.num-sm { min-width:72px; text-align:right; font-variant-numeric:tabular-nums }
+
+    .money-cell {
+      display:flex; align-items:center; gap:4px;
+      border:1px solid transparent; border-radius:7px; padding:0 7px;
+      min-width:136px; transition:border-color .15s, background .15s;
+    }
+    .money-cell:hover { border-color:var(--line); background:#fafbf8 }
+    .money-cell:focus-within { border-color:var(--berry); background:#fff }
+    .money-cell span { color:var(--muted); font-size:12px; user-select:none }
+    .money-cell input {
+      width:100%; min-width:0; border:0; background:transparent;
+      padding:6px 2px; text-align:right; font-variant-numeric:tabular-nums;
+      color:var(--text); font-weight:500;
+    }
+    .money-cell input:focus { outline:none }
+
+    .taskcell { display:flex; align-items:center; gap:6px; min-width:210px }
+    .taskcell input[type=checkbox] { accent-color:var(--matcha); width:16px; height:16px; flex-shrink:0; cursor:pointer }
+
     .badge { display:inline-block; border-radius:20px; padding:4px 10px; background:#eceee6; color:#4b5349; font-size:12px; font-weight:600; white-space:nowrap }
     .badge.done,.badge.lunas,.badge.hadir,.badge.aman,.badge.dihias,.badge.sudah,.badge.selesai { background:#e2efe3; color:var(--green) }
     .badge.pending,.badge.dibeli,.badge.dp,.badge.proses { background:#fdf1d6; color:var(--amber) }
     .badge.tidak,.badge.lebih,.badge.terlambat,.badge.belum { background:var(--berry-soft); color:var(--red) }
     .badge.clickable { cursor:pointer; border:1px solid transparent }
     .badge.clickable:hover { border-color:var(--berry) }
-    .taskline { display:flex; align-items:center; gap:9px; cursor:pointer }
-    .taskline input { accent-color:var(--matcha) }
-    .row-actions { white-space:nowrap }
-    .row-actions button { color:var(--muted); border:0; background:none; padding:5px 8px; border-radius:6px; font-weight:500 }
-    .row-actions button[data-edit]:hover { color:var(--matcha-deep); background:var(--matcha-soft) }
+    .row-actions { white-space:nowrap; text-align:right }
+    .row-actions button { color:var(--muted); border:0; background:none; padding:5px 9px; border-radius:6px; font-weight:500 }
     .row-actions button[data-delete]:hover { color:var(--red); background:var(--berry-soft) }
     .progress { height:7px; background:#e7eadf; border-radius:9px; overflow:hidden; margin-top:9px; min-width:80px }
     .progress i { display:block; height:100%; background:var(--matcha); transition:width .25s }
     .progress i.over { background:var(--berry) }
-    .prog-inline { display:flex; align-items:center; gap:8px }
+    .prog-inline { display:flex; align-items:center; gap:8px; min-width:110px }
     .prog-inline .progress { flex:1; margin-top:0 }
-    .prog-inline small { color:var(--muted); width:38px; text-align:right }
+    .prog-inline small { color:var(--muted); width:36px; text-align:right }
     .num { font-variant-numeric:tabular-nums; white-space:nowrap }
 
     /* DIALOG & TOAST */
@@ -321,7 +350,7 @@
     </div>
     <nav id="nav"></nav>
     <div class="side-note">
-      Data tersimpan di repository GitHub dan disinkronkan langsung tanpa cache browser.
+      Klik langsung sel tabel untuk mengedit angka atau teks. Perubahan otomatis tersimpan ke GitHub.
     </div>
   </aside>
 
@@ -370,7 +399,7 @@
     <div id="itemFields" class="fields"></div>
     <div class="dialog-actions">
       <button type="button" class="btn" id="cancelItem">Batal</button>
-      <button type="submit" class="btn gold">Simpan</button>
+      <button type="submit" class="btn gold">Tambah</button>
     </div>
   </form>
 </dialog>
@@ -379,7 +408,7 @@
 <script>
 "use strict";
 
-const APP_VERSION = "2026-11-16-v5-matchaberry-adm";
+const APP_VERSION = "2026-11-16-v6-inline-edit";
 const VERSION_KEY = "wedding-planner-version";
 const CONFIG_KEY = "wedding-planner-config-v1";
 const CACHE_KEY = "wedding-planner-data-v1";
@@ -457,9 +486,7 @@ const ADMINISTRASI_PRESET = [
 ];
 
 if (location.search.includes("v=")) {
-  try {
-    history.replaceState(null, "", location.pathname + location.hash);
-  } catch {}
+  try { history.replaceState(null, "", location.pathname + location.hash); } catch {}
 }
 
 async function clearBrowserCaches(clearDataCache = true) {
@@ -513,6 +540,13 @@ function esc(v) {
   return String(v ?? "").replace(/[&<>"']/g, c =>
     ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+function fmtInt(v) {
+  return (Number(v) || 0).toLocaleString("id-ID");
+}
+function parseMoneyInput(str) {
+  const digits = String(str ?? "").replace(/\D/g, "");
+  return digits ? Number(digits) : 0;
+}
 function money(v) {
   return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0})
     .format(Number(v)||0);
@@ -546,7 +580,7 @@ function toast(text) {
   const el=document.getElementById("toast");
   el.textContent=text; el.style.display="block";
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.style.display="none",2800);
+  toastTimer=setTimeout(()=>el.style.display="none",2600);
 }
 function readConfig() {
   try { return JSON.parse(localStorage.getItem(CONFIG_KEY)||"{}"); }
@@ -556,9 +590,11 @@ function readConfig() {
 let config = readConfig();
 let data = newData();
 let activeTab = "Ringkasan";
-let editingId = null;
 let seserahanFilter = "Semua";
 let administrasiFilter = "Semua";
+let saveTimer = null;
+let isSaving = false;
+let saveQueued = false;
 
 const fields = {
   budget: [
@@ -638,7 +674,39 @@ function navBadgeText(name) {
   return "";
 }
 
+// ===== HELPERS SEL INLINE =====
+function inlineText(key, id, field, value, cls = "", placeholder = "") {
+  return `<input type="text" class="cell-input ${cls}" data-inline-key="${key}" data-inline-id="${esc(id)}" data-inline-field="${field}" value="${esc(value??"")}" placeholder="${esc(placeholder)}">`;
+}
+function inlineDate(key, id, field, value) {
+  return `<input type="date" class="cell-input date-sm" data-inline-key="${key}" data-inline-id="${esc(id)}" data-inline-field="${field}" value="${esc(value??"")}">`;
+}
+function inlineNumber(key, id, field, value, min = 0) {
+  return `<input type="number" class="cell-input num-sm" min="${min}" step="1" data-inline-key="${key}" data-inline-id="${esc(id)}" data-inline-field="${field}" value="${Number(value)||min}">`;
+}
+function inlineMoney(key, id, field, value) {
+  return `<div class="money-cell"><span>Rp</span><input type="text" inputmode="numeric" data-money="1" data-inline-key="${key}" data-inline-id="${esc(id)}" data-inline-field="${field}" value="${fmtInt(value)}"></div>`;
+}
+function inlineSelect(key, id, field, value, options) {
+  const opts = options.map(o => `<option value="${esc(o)}" ${o===value?"selected":""}>${esc(o)}</option>`).join("");
+  return `<select class="cell-input" data-inline-key="${key}" data-inline-id="${esc(id)}" data-inline-field="${field}">${opts}</select>`;
+}
+
+function getFocusState() {
+  const el = document.activeElement;
+  if (!el || !el.dataset || !el.dataset.inlineId) return null;
+  return { key: el.dataset.inlineKey, id: el.dataset.inlineId, field: el.dataset.inlineField };
+}
+function restoreFocusState(st) {
+  if (!st) return;
+  const sel = `[data-inline-key="${CSS.escape(st.key)}"][data-inline-id="${CSS.escape(st.id)}"][data-inline-field="${CSS.escape(st.field)}"]`;
+  const target = document.querySelector(sel);
+  if (target) target.focus({ preventScroll: true });
+}
+
 function render() {
+  const focusState = getFocusState();
+
   const nav=document.getElementById("nav");
   nav.innerHTML=TABS.map(t=>{
     const badge=navBadgeText(t.name);
@@ -663,7 +731,6 @@ function render() {
 
   app.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>openItem(b.dataset.add)));
   app.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>removeItem(b.dataset.delete,b.dataset.id)));
-  app.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>editItem(b.dataset.edit,b.dataset.id)));
   app.querySelectorAll("[data-task]").forEach(b=>b.addEventListener("change",()=>toggleTask(b.dataset.task,b.checked)));
   app.querySelectorAll("[data-seserahan-filter]").forEach(b=>b.addEventListener("click",()=>{
     seserahanFilter=b.dataset.seserahanFilter; render();
@@ -674,10 +741,41 @@ function render() {
   }));
   app.querySelectorAll("[data-cycle-adm]").forEach(b=>b.addEventListener("click",()=>cycleAdministrasi(b.dataset.cycleAdm)));
 
+  // Event untuk seluruh sel edit inline
+  app.querySelectorAll("[data-inline-id]").forEach(el => {
+    if (el.dataset.money) {
+      el.addEventListener("focus", () => {
+        const raw = parseMoneyInput(el.value);
+        el.value = raw ? String(raw) : "";
+        el.select();
+      });
+      el.addEventListener("blur", () => {
+        el.value = fmtInt(parseMoneyInput(el.value));
+      });
+    }
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" && el.tagName === "INPUT") {
+        e.preventDefault();
+        el.blur();
+      }
+    });
+    el.addEventListener("change", () => {
+      const { inlineKey, inlineId, inlineField } = el.dataset;
+      let val;
+      if (el.dataset.money) val = parseMoneyInput(el.value);
+      else if (el.type === "number") val = Math.max(Number(el.min || 0), Number(el.value || 0));
+      else val = el.value.trim();
+
+      updateInlineField(inlineKey, inlineId, inlineField, val);
+    });
+  });
+
   const dateInput=document.getElementById("weddingDateInput");
   if(dateInput) {
     dateInput.addEventListener("change",()=>changeData(()=>{data.weddingDate=dateInput.value;}));
   }
+
+  restoreFocusState(focusState);
 }
 
 function makeTable(headers,rows,footer="") {
@@ -880,37 +978,37 @@ function budgetView() {
     const st=budgetStats(x);
     sumEst+=st.est; sumSpent+=st.spent;
     return `<tr>
-      <td><strong>${esc(x.name)}</strong></td>
-      <td class="num">${money(st.est)}</td>
+      <td>${inlineText("budget",x.id,"name",x.name,"bold","Nama kategori")}</td>
+      <td>${inlineMoney("budget",x.id,"amount",x.amount)}</td>
       <td class="num">${money(st.spent)}</td>
       <td class="num">${money(st.left)}</td>
       <td><div class="prog-inline"><div class="progress"><i class="${st.spent>st.est?"over":""}" style="width:${Math.min(st.pct,100)}%"></i></div><small>${st.pct}%</small></div></td>
       <td><span class="badge ${st.status[1]}">${st.status[0]}</span></td>
-      <td class="row-actions"><button data-edit="budget" data-id="${esc(x.id)}">Ubah</button><button data-delete="budget" data-id="${esc(x.id)}">Hapus</button></td>
+      <td class="row-actions"><button data-delete="budget" data-id="${esc(x.id)}">Hapus</button></td>
     </tr>`;
   }).join("");
   const footer = data.budget.length
     ? `<tr><td>Total</td><td class="num">${money(sumEst)}</td><td class="num">${money(sumSpent)}</td><td class="num">${money(sumEst-sumSpent)}</td><td colspan="3"></td></tr>`
     : "";
-  return `<section class="panel"><div class="panel-head"><h2>Anggaran</h2><button class="btn gold" data-add="budget">＋ Tambah kategori</button></div>${makeTable(["Kategori","Anggaran","Realisasi","Sisa","Terpakai","Status","Aksi"],rows,footer)}</section>`;
+  return `<section class="panel"><div class="panel-head"><div><h2>Anggaran</h2><span class="muted">Klik nama atau nominal di tabel untuk langsung mengubah.</span></div><button class="btn gold" data-add="budget">＋ Tambah kategori</button></div>${makeTable(["Kategori","Anggaran","Realisasi","Sisa","Terpakai","Status",""],rows,footer)}</section>`;
 }
 
 function expenseView() {
   const total=data.expenses.reduce((s,x)=>s+Number(x.amount||0),0);
+  const catOptions = data.budget.map(b => b.name);
   const rows=data.expenses.map(x=>{
-    const st=x.status||"Lunas";
-    const cls=st==="Lunas"?"lunas":st==="DP"?"dp":"tidak";
+    const listCats = catOptions.includes(x.category) ? catOptions : [x.category, ...catOptions].filter(Boolean);
     return `<tr>
-      <td>${esc(x.date||"-")}</td>
-      <td>${esc(x.name)}</td>
-      <td>${esc(x.category)}</td>
-      <td>${esc(x.vendor||"-")}</td>
-      <td class="num">${money(x.amount)}</td>
-      <td><span class="badge ${cls}">${esc(st)}</span></td>
-      <td class="row-actions"><button data-edit="expenses" data-id="${esc(x.id)}">Ubah</button><button data-delete="expenses" data-id="${esc(x.id)}">Hapus</button></td>
+      <td>${inlineDate("expenses",x.id,"date",x.date)}</td>
+      <td>${inlineText("expenses",x.id,"name",x.name,"bold","Deskripsi")}</td>
+      <td>${inlineSelect("expenses",x.id,"category",x.category,listCats)}</td>
+      <td>${inlineText("expenses",x.id,"vendor",x.vendor,"","Vendor")}</td>
+      <td>${inlineMoney("expenses",x.id,"amount",x.amount)}</td>
+      <td>${inlineSelect("expenses",x.id,"status",x.status||"Lunas",["Lunas","DP","Belum bayar"])}</td>
+      <td class="row-actions"><button data-delete="expenses" data-id="${esc(x.id)}">Hapus</button></td>
     </tr>`;
   }).join("");
-  return `<section class="panel"><div class="panel-head"><div><h2>Pengeluaran</h2><span class="muted">Total tercatat: ${money(total)}</span></div><button class="btn gold" data-add="expenses">＋ Tambah pengeluaran</button></div>${makeTable(["Tanggal","Deskripsi","Kategori","Vendor","Jumlah","Status","Aksi"],rows)}</section>`;
+  return `<section class="panel"><div class="panel-head"><div><h2>Pengeluaran</h2><span class="muted">Total tercatat: ${money(total)} · Edit langsung di tabel.</span></div><button class="btn gold" data-add="expenses">＋ Tambah pengeluaran</button></div>${makeTable(["Tanggal","Deskripsi","Kategori","Vendor","Jumlah","Status",""],rows)}</section>`;
 }
 
 function paymentView() {
@@ -919,16 +1017,17 @@ function paymentView() {
     const isPaid = total > 0 && paid >= total;
     const status = isPaid ? ["Lunas","lunas"] : paid > 0 ? ["DP / Cicilan","dp"] : ["Belum bayar","tidak"];
     return `<tr>
-      <td><strong>${esc(x.vendor)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
-      <td class="num">${money(total)}</td>
-      <td class="num">${money(paid)}</td>
+      <td>${inlineText("payments",x.id,"vendor",x.vendor,"bold","Nama vendor")}</td>
+      <td>${inlineText("payments",x.id,"note",x.note,"","Termin / catatan")}</td>
+      <td>${inlineMoney("payments",x.id,"total",total)}</td>
+      <td>${inlineMoney("payments",x.id,"paid",paid)}</td>
       <td class="num">${money(Math.max(0,left))}</td>
-      <td>${esc(x.due||"-")}</td>
+      <td>${inlineDate("payments",x.id,"due",x.due)}</td>
       <td><span class="badge ${status[1]}">${status[0]}</span></td>
-      <td class="row-actions"><button data-edit="payments" data-id="${esc(x.id)}">Ubah</button><button data-delete="payments" data-id="${esc(x.id)}">Hapus</button></td>
+      <td class="row-actions"><button data-delete="payments" data-id="${esc(x.id)}">Hapus</button></td>
     </tr>`;
   }).join("");
-  return `<section class="panel"><div class="panel-head"><h2>Pembayaran Vendor</h2><button class="btn gold" data-add="payments">＋ Tambah pembayaran</button></div>${makeTable(["Vendor","Total Kontrak","Sudah Dibayar","Sisa","Jatuh Tempo","Status","Aksi"],rows)}</section>`;
+  return `<section class="panel"><div class="panel-head"><div><h2>Pembayaran Vendor</h2><span class="muted">Ubah total kontrak atau cicilan langsung di kolom tabel.</span></div><button class="btn gold" data-add="payments">＋ Tambah pembayaran</button></div>${makeTable(["Vendor","Termin","Total Kontrak","Sudah Dibayar","Sisa","Jatuh Tempo","Status",""],rows)}</section>`;
 }
 
 function checklistView() {
@@ -938,47 +1037,43 @@ function checklistView() {
     const rowCls = x.done ? "done-row" : overdue ? "overdue" : "";
     const badge = x.done ? ["Selesai","done"] : overdue ? ["Terlambat","terlambat"] : ["Belum","pending"];
     return `<tr class="${rowCls}">
-      <td><label class="taskline"><input type="checkbox" data-task="${esc(x.id)}" ${x.done?"checked":""}><span class="task-text">${esc(x.task)}</span></label></td>
-      <td>${esc(x.category||"-")}</td>
-      <td>${esc(x.due||"-")}</td>
-      <td>${esc(x.owner||"-")}</td>
+      <td><div class="taskcell"><input type="checkbox" data-task="${esc(x.id)}" ${x.done?"checked":""}>${inlineText("checklist",x.id,"task",x.task,"","Nama tugas")}</div></td>
+      <td>${inlineSelect("checklist",x.id,"category",x.category||"Persiapan",["Persiapan","Vendor","Undangan","Seserahan","Hari-H","Lainnya"])}</td>
+      <td>${inlineDate("checklist",x.id,"due",x.due)}</td>
+      <td>${inlineText("checklist",x.id,"owner",x.owner,"","PJ")}</td>
       <td><span class="badge ${badge[1]}">${badge[0]}</span></td>
-      <td class="row-actions"><button data-edit="checklist" data-id="${esc(x.id)}">Ubah</button><button data-delete="checklist" data-id="${esc(x.id)}">Hapus</button></td>
+      <td class="row-actions"><button data-delete="checklist" data-id="${esc(x.id)}">Hapus</button></td>
     </tr>`;
   }).join("");
-  return `<section class="panel"><div class="panel-head"><div><h2>Checklist</h2><span class="muted">Tugas lewat tenggat ditandai garis berry di sisi kiri.</span></div><button class="btn gold" data-add="checklist">＋ Tambah tugas</button></div>${makeTable(["Tugas","Kategori","Tenggat","PJ","Status","Aksi"],rows)}</section>`;
+  return `<section class="panel"><div class="panel-head"><div><h2>Checklist</h2><span class="muted">Tugas lewat tenggat ditandai garis berry di sisi kiri.</span></div><button class="btn gold" data-add="checklist">＋ Tambah tugas</button></div>${makeTable(["Tugas","Kategori","Tenggat","PJ","Status",""],rows)}</section>`;
 }
 
 function vendorView() {
-  const rows=data.vendors.map(x=>{
-    const bk=x.booked||"Belum";
-    const cls=bk==="Sudah"?"sudah":bk==="DP / Proses"?"proses":"pending";
-    return `<tr>
-      <td><strong>${esc(x.name)}</strong></td>
-      <td>${esc(x.category)}</td>
-      <td>${esc(x.contact||"-")}</td>
-      <td class="num">${money(x.price)}</td>
-      <td><span class="badge ${cls}">${esc(bk)}</span></td>
-      <td>${esc(x.note||"-")}</td>
-      <td class="row-actions"><button data-edit="vendors" data-id="${esc(x.id)}">Ubah</button><button data-delete="vendors" data-id="${esc(x.id)}">Hapus</button></td>
-    </tr>`;
-  }).join("");
-  return `<section class="panel"><div class="panel-head"><h2>Vendor</h2><button class="btn gold" data-add="vendors">＋ Tambah vendor</button></div>${makeTable(["Nama Vendor","Kategori","Kontak","Harga","Booking","Catatan","Aksi"],rows)}</section>`;
+  const rows=data.vendors.map(x=>`<tr>
+    <td>${inlineText("vendors",x.id,"name",x.name,"bold","Nama vendor")}</td>
+    <td>${inlineText("vendors",x.id,"category",x.category,"","Kategori")}</td>
+    <td>${inlineText("vendors",x.id,"contact",x.contact,"","Kontak")}</td>
+    <td>${inlineMoney("vendors",x.id,"price",x.price)}</td>
+    <td>${inlineSelect("vendors",x.id,"booked",x.booked||"Belum",["Belum","DP / Proses","Sudah"])}</td>
+    <td>${inlineText("vendors",x.id,"note",x.note,"","Catatan")}</td>
+    <td class="row-actions"><button data-delete="vendors" data-id="${esc(x.id)}">Hapus</button></td>
+  </tr>`).join("");
+  return `<section class="panel"><div class="panel-head"><div><h2>Vendor</h2><span class="muted">Edit penawaran harga dan status booking langsung di tabel.</span></div><button class="btn gold" data-add="vendors">＋ Tambah vendor</button></div>${makeTable(["Nama Vendor","Kategori","Kontak","Harga","Booking","Catatan",""],rows)}</section>`;
 }
 
 function guestView() {
   const hadir=data.guests.filter(g=>g.rsvp==="Hadir").reduce((s,g)=>s+Number(g.count||1),0);
   const pending=data.guests.filter(g=>(g.rsvp||"Belum konfirmasi")==="Belum konfirmasi").length;
   const rows=data.guests.map(x=>`<tr>
-    <td><strong>${esc(x.name)}</strong></td>
-    <td>${esc(x.side||"-")}</td>
-    <td>${esc(x.contact||"-")}</td>
-    <td class="num">${esc(x.count||1)}</td>
-    <td><span class="badge ${x.rsvp==="Hadir"?"hadir":x.rsvp==="Tidak hadir"?"tidak":"pending"}">${esc(x.rsvp||"Belum konfirmasi")}</span></td>
-    <td>${esc(x.note||"-")}</td>
-    <td class="row-actions"><button data-edit="guests" data-id="${esc(x.id)}">Ubah</button><button data-delete="guests" data-id="${esc(x.id)}">Hapus</button></td>
+    <td>${inlineText("guests",x.id,"name",x.name,"bold","Nama tamu")}</td>
+    <td>${inlineSelect("guests",x.id,"side",x.side||"Teman",["Keluarga Pria","Keluarga Wanita","Teman","Rekan Kerja","Lainnya"])}</td>
+    <td>${inlineText("guests",x.id,"contact",x.contact,"","Kontak")}</td>
+    <td>${inlineNumber("guests",x.id,"count",x.count||1,1)}</td>
+    <td>${inlineSelect("guests",x.id,"rsvp",x.rsvp||"Belum konfirmasi",["Belum konfirmasi","Hadir","Tidak hadir"])}</td>
+    <td>${inlineText("guests",x.id,"note",x.note,"","Catatan / pantangan")}</td>
+    <td class="row-actions"><button data-delete="guests" data-id="${esc(x.id)}">Hapus</button></td>
   </tr>`).join("");
-  return `<section class="panel"><div class="panel-head"><div><h2>Tamu</h2><span class="muted">Total hadir: ${hadir} orang · Menunggu RSVP: ${pending} undangan</span></div><button class="btn gold" data-add="guests">＋ Tambah tamu</button></div>${makeTable(["Nama","Kategori","Kontak","Jumlah","RSVP","Catatan","Aksi"],rows)}</section>`;
+  return `<section class="panel"><div class="panel-head"><div><h2>Tamu</h2><span class="muted">Total hadir: ${hadir} orang · Menunggu RSVP: ${pending} undangan</span></div><button class="btn gold" data-add="guests">＋ Tambah tamu</button></div>${makeTable(["Nama","Kategori","Kontak","Jumlah","RSVP","Catatan",""],rows)}</section>`;
 }
 
 function seserahanView() {
@@ -997,13 +1092,14 @@ function seserahanView() {
     const st = x.status || "Belum dibeli";
     const cls = st === "Sudah dihias" ? "dihias" : st === "Sudah dibeli" ? "dibeli" : "pending";
     return `<tr>
-      <td><strong>${esc(x.name)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
-      <td>${esc(x.side||"Untuk Wanita")}</td>
-      <td>${esc(x.category||"-")}</td>
-      <td class="num">${money(x.estimated)}</td>
-      <td class="num">${money(x.actual)}</td>
+      <td>${inlineText("seserahan",x.id,"name",x.name,"bold","Nama barang")}</td>
+      <td>${inlineSelect("seserahan",x.id,"side",x.side||"Untuk Wanita",["Untuk Wanita","Untuk Pria","Bersama"])}</td>
+      <td>${inlineSelect("seserahan",x.id,"category",x.category||"Lainnya",["Ibadah","Busana","Aksesoris","Kecantikan","Perhiasan","Perlengkapan","Makanan / Kue","Jasa Hias","Lainnya"])}</td>
+      <td>${inlineMoney("seserahan",x.id,"estimated",x.estimated)}</td>
+      <td>${inlineMoney("seserahan",x.id,"actual",x.actual)}</td>
       <td><button type="button" class="badge clickable ${cls}" data-cycle-seserahan="${esc(x.id)}" title="Klik untuk ubah status">${esc(st)}</button></td>
-      <td class="row-actions"><button data-edit="seserahan" data-id="${esc(x.id)}">Ubah</button><button data-delete="seserahan" data-id="${esc(x.id)}">Hapus</button></td>
+      <td>${inlineText("seserahan",x.id,"note",x.note,"","Catatan / toko")}</td>
+      <td class="row-actions"><button data-delete="seserahan" data-id="${esc(x.id)}">Hapus</button></td>
     </tr>`;
   }).join("");
 
@@ -1023,14 +1119,14 @@ function seserahanView() {
       <div class="panel-head">
         <div>
           <h2>Daftar Seserahan</h2>
-          <span class="muted">Klik status untuk mengganti (Belum dibeli → Sudah dibeli → Sudah dihias).</span>
+          <span class="muted">Edit estimasi/realisasi langsung di tabel · klik badge status untuk mengganti.</span>
         </div>
         <div class="toolbar">
           ${filters}
           <button class="btn gold" data-add="seserahan">＋ Tambah seserahan</button>
         </div>
       </div>
-      ${makeTable(["Barang","Pihak","Kategori","Estimasi","Realisasi","Status","Aksi"], rows)}
+      ${makeTable(["Barang","Pihak","Kategori","Estimasi","Realisasi","Status","Catatan",""], rows)}
     </section>`;
 }
 
@@ -1049,12 +1145,13 @@ function administrasiView() {
     const st = x.status || "Belum diurus";
     const cls = st === "Selesai" ? "selesai" : st === "Sedang proses" ? "proses" : "belum";
     return `<tr>
-      <td><strong>${esc(x.name)}</strong>${x.note?`<div class="muted" style="font-size:12px">${esc(x.note)}</div>`:""}</td>
-      <td>${esc(x.forWhom||"Bersama")}</td>
-      <td>${esc(x.category||"-")}</td>
-      <td>${esc(x.due||"-")}</td>
+      <td>${inlineText("administrasi",x.id,"name",x.name,"bold","Nama dokumen")}</td>
+      <td>${inlineSelect("administrasi",x.id,"forWhom",x.forWhom||"Bersama",["Bersama","Pria","Wanita"])}</td>
+      <td>${inlineSelect("administrasi",x.id,"category",x.category||"Lainnya",["Kelurahan / RT-RW","KUA / Kependudukan","Kesehatan & BKKBN","Catatan Sipil","Pra & Pasca Nikah","Lainnya"])}</td>
+      <td>${inlineDate("administrasi",x.id,"due",x.due)}</td>
       <td><button type="button" class="badge clickable ${cls}" data-cycle-adm="${esc(x.id)}" title="Klik untuk ubah status">${esc(st)}</button></td>
-      <td class="row-actions"><button data-edit="administrasi" data-id="${esc(x.id)}">Ubah</button><button data-delete="administrasi" data-id="${esc(x.id)}">Hapus</button></td>
+      <td>${inlineText("administrasi",x.id,"note",x.note,"","Keterangan / syarat")}</td>
+      <td class="row-actions"><button data-delete="administrasi" data-id="${esc(x.id)}">Hapus</button></td>
     </tr>`;
   }).join("");
 
@@ -1074,14 +1171,14 @@ function administrasiView() {
       <div class="panel-head">
         <div>
           <h2>Daftar Administrasi Pernikahan</h2>
-          <span class="muted">Klik status untuk mengganti (Belum diurus → Sedang proses → Selesai).</span>
+          <span class="muted">Edit target/keterangan langsung di tabel · klik badge status untuk mengganti.</span>
         </div>
         <div class="toolbar">
           ${filters}
           <button class="btn gold" data-add="administrasi">＋ Tambah dokumen</button>
         </div>
       </div>
-      ${makeTable(["Dokumen / Proses","Pihak","Kategori","Target","Status","Aksi"], rows)}
+      ${makeTable(["Dokumen / Proses","Pihak","Kategori","Target","Status","Keterangan",""], rows)}
     </section>`;
 }
 
@@ -1246,36 +1343,76 @@ async function saveToGitHub() {
     throw err;
   }
 }
-async function changeData(fn) {
+
+function scheduleSave() {
+  localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  if (!config.owner || !config.repo || !config.token) {
+    showStatus("Tersimpan di browser saja — atur GitHub untuk sinkronisasi", "warn");
+    return;
+  }
+  showStatus("Menyimpan perubahan…", "warn");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flushSave, 700);
+}
+async function flushSave() {
+  if (isSaving) { saveQueued = true; return; }
+  isSaving = true;
+  try {
+    await saveToGitHub();
+    toast("Data tersimpan");
+  } catch {
+    toast("Tersimpan lokal; sinkronisasi GitHub gagal");
+  } finally {
+    isSaving = false;
+    if (saveQueued) { saveQueued = false; flushSave(); }
+  }
+}
+
+async function changeData(fn, debounce = false) {
   fn();
   render();
+  if (debounce) {
+    scheduleSave();
+    return;
+  }
   localStorage.setItem(CACHE_KEY,JSON.stringify(data));
   try { await saveToGitHub(); toast("Data tersimpan"); }
   catch { toast("Tersimpan lokal; sinkronisasi GitHub gagal"); }
 }
 
-function editItem(key,id) {
-  openItem(key,data[key].find(x=>x.id===id));
+function updateInlineField(key, id, field, value) {
+  changeData(() => {
+    if (key === "budget" && field === "name") {
+      const old = data.budget.find(x => x.id === id);
+      if (old && old.name !== value && value) {
+        data.expenses = data.expenses.map(ex => ex.category === old.name ? { ...ex, category: value } : ex);
+      }
+    }
+    data[key] = data[key].map(x => {
+      if (x.id !== id) return x;
+      if (key === "budget" && field === "name" && !value) return x;
+      return { ...x, [field]: value };
+    });
+  }, true);
 }
-function openItem(key,item=null) {
-  editingId=item?item.id:null;
+
+function openItem(key) {
   const dialog=document.getElementById("itemDialog");
-  document.getElementById("itemTitle").textContent=(item?"Ubah ":"Tambah ")+titles[key];
+  document.getElementById("itemTitle").textContent="Tambah "+titles[key];
   const host=document.getElementById("itemFields");
   host.innerHTML=fields[key].map(([name,label,type,req,extra])=>{
     const defVal = type==="number" && extra!==undefined ? extra : "";
-    const value=item?.[name]??defVal;
     const reqAttr = req ? "required" : "";
     if(type==="category") {
-      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${data.budget.map(b=>`<option value="${esc(b.name)}" ${value===b.name?"selected":""}>${esc(b.name)}</option>`).join("")}</select></div>`;
+      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${data.budget.map(b=>`<option value="${esc(b.name)}">${esc(b.name)}</option>`).join("")}</select></div>`;
     }
     if(type==="select") {
-      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${(extra||[]).map(v=>`<option value="${esc(v)}" ${value===v?"selected":""}>${esc(v)}</option>`).join("")}</select></div>`;
+      return `<div class="field"><label>${label}</label><select name="${name}" ${reqAttr}>${(extra||[]).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("")}</select></div>`;
     }
     if(type==="textarea") {
-      return `<div class="field"><label>${label}</label><textarea name="${name}" ${reqAttr}>${esc(value)}</textarea></div>`;
+      return `<div class="field"><label>${label}</label><textarea name="${name}" ${reqAttr}></textarea></div>`;
     }
-    return `<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${esc(value)}" ${type==="number"?'min="0" step="1"':''} ${reqAttr}></div>`;
+    return `<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${esc(defVal)}" ${type==="number"?'min="0" step="1"':''} ${reqAttr}></div>`;
   }).join("");
   dialog.dataset.key=key;
   dialog.showModal();
@@ -1292,18 +1429,7 @@ document.getElementById("itemForm").addEventListener("submit",async e=>{
   }
   dialog.close();
   await changeData(()=>{
-    if(editingId) {
-      if(key==="budget") {
-        const old=data.budget.find(x=>x.id===editingId);
-        if(old && old.name!==item.name) {
-          data.expenses=data.expenses.map(ex=>ex.category===old.name?{...ex,category:item.name}:ex);
-        }
-      }
-      data[key]=data[key].map(x=>x.id===editingId?{...x,...item}:x);
-    } else {
-      data[key].push({id:uid(),...item,...(key==="checklist"?{done:false}:{})});
-    }
-    editingId=null;
+    data[key].push({id:uid(),...item,...(key==="checklist"?{done:false}:{})});
   });
 });
 
@@ -1312,7 +1438,7 @@ async function removeItem(key,id) {
   await changeData(()=>{data[key]=data[key].filter(x=>x.id!==id);});
 }
 async function toggleTask(id,done) {
-  await changeData(()=>{data.checklist=data.checklist.map(x=>x.id===id?{...x,done}:x);});
+  await changeData(()=>{data.checklist=data.checklist.map(x=>x.id===id?{...x,done}:x);}, true);
 }
 async function cycleSeserahan(id) {
   const order=["Belum dibeli","Sudah dibeli","Sudah dihias"];
@@ -1322,7 +1448,7 @@ async function cycleSeserahan(id) {
       const next=order[(order.indexOf(x.status||"Belum dibeli")+1)%order.length];
       return {...x,status:next};
     });
-  });
+  }, true);
 }
 async function cycleAdministrasi(id) {
   const order=["Belum diurus","Sedang proses","Selesai"];
@@ -1332,7 +1458,7 @@ async function cycleAdministrasi(id) {
       const next=order[(order.indexOf(x.status||"Belum diurus")+1)%order.length];
       return {...x,status:next};
     });
-  });
+  }, true);
 }
 
 (async function init() {
